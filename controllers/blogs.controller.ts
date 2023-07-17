@@ -9,7 +9,12 @@ export const get = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const create = catchAsync(async (req: Request, res: Response) => {
-  const data = await BlogService.create({ ...req.body, files: req.files });
+  const user: any = req.user;
+  const data = await BlogService.create({
+    ...req.body,
+    files: req.files,
+    created_by: user.id,
+  });
 
   return res.json(data);
 });

@@ -8,7 +8,7 @@ import { CategoryService } from "../services";
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await CategoryService.query(
     { ...req.query },
-    { populate: "created_by, category_id" }
+    {} // { populate: "created_by ,category_id" }
   );
   return res.json(data);
 });

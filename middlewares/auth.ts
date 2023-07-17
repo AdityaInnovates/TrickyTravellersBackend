@@ -3,9 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import ApiError from "../utils/ApiError";
 import { rights } from "../config/roles";
 import { NextFunction, Request, Response } from "express";
-const verifyCallback =
-  (req: any, resolve: any, reject: any, requiredRights: any) =>
-  async (err: any, user: any, info: any) => {
+const verifyCallback = (
+  req: any,
+  resolve: any,
+  reject: any,
+  requiredRights: any
+) => {
+  return async (err: any, user: any, info: any) => {
     if (err || info || !user) {
       return reject(
         new ApiError(StatusCodes.UNAUTHORIZED, "Please authenticate")
@@ -30,6 +34,7 @@ const verifyCallback =
 
     resolve();
   };
+};
 
 const auth =
   (...requiredRights: any) =>
@@ -45,4 +50,4 @@ const auth =
       .catch((err) => next(err));
   };
 
-module.exports = auth;
+export default auth;

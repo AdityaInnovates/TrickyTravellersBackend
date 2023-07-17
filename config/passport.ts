@@ -1,6 +1,6 @@
 import config from "./config";
 import { Strategy, ExtractJwt } from "passport-jwt";
-import { User } from "../models/index";
+import { User } from "../models";
 const jwtOptions = {
   secretOrKey: config.jwt.secret,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -8,7 +8,7 @@ const jwtOptions = {
 
 const verifyJwt = async (payload: any, done: any) => {
   try {
-    const user = await User.findById(payload.sub);
+    const user = await User.findById(payload.id);
     if (!user) {
       done(null, false);
     }
