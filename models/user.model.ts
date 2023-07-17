@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Model, Document } from "mongoose";
 import crypto from "crypto";
 
-export interface User {
+export interface User extends Document {
   name: string;
   password: string;
   email: string;
@@ -11,6 +11,13 @@ export interface User {
   google_id?: string;
   remember_token?: string;
   profile_photo_path?: string;
+  isPasswordMatch(password: string): boolean;
+}
+
+export interface UserModel extends Model<User> {
+  isEmailTaken(email: string): boolean;
+  paginate: any;
+  toJSON: any;
 }
 
 const schema = new Schema<User>(
@@ -53,7 +60,7 @@ const schema = new Schema<User>(
     },
     google_id: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   { timestamps: true }
@@ -81,5 +88,5 @@ schema.pre("save", async function (next: any) {
   next();
 });
 
-const userModel = model<User>("users", schema);
+const userModel = model<User, UserModel>("users", schema);
 export default userModel;
