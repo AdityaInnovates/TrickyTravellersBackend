@@ -2,6 +2,7 @@ import { Router } from "express";
 import { UserController } from "../controllers";
 import validate from "../middlewares/validate";
 import { UserValidation } from "../validations";
+import auth from "../middlewares/auth";
 
 const router = Router();
 
@@ -11,5 +12,16 @@ router.post(
   validate(UserValidation.register),
   UserController.register
 );
-
+router.post(
+  "/change-password",
+  auth("profile"),
+  validate(UserValidation.change_password),
+  UserController.change_password
+);
+router.post(
+  "/update-profile",
+  auth("profile"),
+  validate(UserValidation.update),
+  UserController.update_profile
+);
 export default router;

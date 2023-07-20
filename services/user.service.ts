@@ -29,6 +29,7 @@ export const createUser = async (body: any) => {
 };
 
 export const updateUser = async (body: any, user: any) => {
+  console.log(body, user);
   Object.assign(user, body);
 
   await user.save();

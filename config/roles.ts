@@ -7,6 +7,7 @@ rights.set(roles[0], [
   "blog-update",
   "blog-read",
   "category-read",
+  "profile",
 ]);
 rights.set(roles[1], [
   "blog-create",
