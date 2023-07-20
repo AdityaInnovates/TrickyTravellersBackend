@@ -27,3 +27,10 @@ export const createUser = async (body: any) => {
   const user = await Model.create({ ...body });
   return user;
 };
+
+export const updateUser = async (body: any, user: any) => {
+  Object.assign(user, body);
+
+  await user.save();
+  return user;
+};

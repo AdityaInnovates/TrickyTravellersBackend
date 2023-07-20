@@ -5,20 +5,13 @@ export interface User extends Document {
   name: string;
   password: string;
   email: string;
-  role?: string;
+  role: string;
   active: boolean;
   ban: boolean;
   google_id?: string;
   remember_token?: string;
   profile_photo_path?: string;
   isPasswordMatch(password: string): boolean;
-}
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User;
-    }
-  }
 }
 
 export interface UserModel extends Model<User> {
