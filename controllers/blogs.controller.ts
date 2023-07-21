@@ -4,7 +4,10 @@ import catchAsync from "../utils/catchAsync";
 import { BlogService } from "../services";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
-  const data = await BlogService.query({ ...req.params }, {});
+  const data = await BlogService.query(
+    { slug: req.query.slug },
+    { ...req.query }
+  );
   return res.json(data);
 });
 
