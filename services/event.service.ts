@@ -14,8 +14,6 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
-    featured: data.files.featured[0].path,
-    extra_image: data.files.extra_image[0].path,
   });
   return blog;
 };
