@@ -6,7 +6,7 @@ import { BlogService } from "../services";
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
     req.query.slug ? { slug: req.query.slug } : {},
-    { ...req.query }
+    { ...req.query, populate: "created_by,category_id" }
   );
   return res.json(data);
 });

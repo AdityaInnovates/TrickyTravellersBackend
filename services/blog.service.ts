@@ -4,7 +4,7 @@ import { Blog } from "../models/blogs.model";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id);
+  const data = await Model.findById(id).populate(["category_id", "created_by"]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
