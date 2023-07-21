@@ -35,6 +35,6 @@ router.put(
   ]),
   BlogController.update
 );
-router.get("/single/:id", auth("category-read"), BlogController.getSingle);
+router.get("/single/:id", BlogController.getSingle);
 
 export default router;
