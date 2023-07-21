@@ -28,7 +28,7 @@ export const deleteDocument = catchAsync(
     return res.json(data);
   }
 );
-
+  
 export const update = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.update(req.params.id, {
     ...req.body,

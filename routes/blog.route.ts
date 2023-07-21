@@ -28,11 +28,12 @@ router.delete(
 router.put(
   "/:id",
   auth("blog-update"),
-  validate(BlogValidation.update),
   upload.fields([
     { name: "extra_image", maxCount: 1 },
     { name: "featured", maxCount: 1 },
   ]),
+  validate(BlogValidation.update),
+
   BlogController.update
 );
 router.get("/single/:id", BlogController.getSingle);
