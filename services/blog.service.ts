@@ -30,7 +30,7 @@ export const update = async (id: string, data: any) => {
   Object.assign(result, {
     ...data,
     ...(data.files.featured ? { featured: data.files.featured[0].path } : {}),
-    ...(data.files.extra ? { extra: data.files.extra[0].path } : {}),
+    ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });
   await result.save();
   return result;
