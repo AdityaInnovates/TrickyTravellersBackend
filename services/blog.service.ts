@@ -21,6 +21,13 @@ export const create = async (data: any) => {
 };
 
 export const query = async (filter: any, options: any) => {
+  if (Object.keys(filter).length > 0) {
+    const categories = await Model.find(filter).populate([
+      "created_by",
+      "category_id",
+    ]);
+    return categories;
+  }
   const categories = await Model.paginate(filter, options);
   return categories;
 };
