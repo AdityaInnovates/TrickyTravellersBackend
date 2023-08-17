@@ -4,10 +4,11 @@ import * as user from "./user.service";
 import * as token from "./token.service";
 import * as event from "./event.service";
 import * as destination from "./destination.service";
-
+import * as stays from "./stays.service";
 export const CategoryService = category;
 export const BlogService = blog;
 export const UserService = user;
 export const TokenService = token;
 export const EventService = event;
 export const DestinationService = destination;
+export const StaysService = stays;
