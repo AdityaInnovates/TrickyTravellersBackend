@@ -29,6 +29,7 @@ const schema = new Schema<User>(
     password: {
       type: String,
       required: true,
+      select: false,
     },
     email: {
       type: String,
