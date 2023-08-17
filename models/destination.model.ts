@@ -5,6 +5,7 @@ import toJSON from "./plugins/toJSON";
 export interface Destination extends Document {
   image: string;
   name: string;
+  description: string;
 }
 interface DestinationModel extends Model<Destination> {
   paginate: any;
@@ -19,6 +20,7 @@ const schema = new Schema<Destination>(
       type: String,
       required: true,
     },
+    description: { type: String, required: true },
   },
   { timestamps: true }
 );
