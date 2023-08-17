@@ -7,7 +7,7 @@ import auth from "../middlewares/auth";
 
 const router = Router();
 
-router.get("/", auth("category-read"), CategoryController.get);
+router.get("/", CategoryController.get);
 router.post("/", auth("category-create"), CategoryController.create);
 router.delete(
   "/:id",
