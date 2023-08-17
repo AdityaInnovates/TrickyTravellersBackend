@@ -6,6 +6,8 @@ export interface Event {
   date: Date;
   keywords: [string];
   location_id: string;
+  image: string;
+  category_id: Types.ObjectId;
   price: number;
   slug: string;
   status: number;
@@ -24,6 +26,12 @@ const schema = new Schema<Event>(
     title: { type: String, required: true },
     body: { type: String, required: true },
     date: { type: Date, required: true },
+    image: { type: String, required: true },
+    category_id: {
+      type: Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
+    },
     keywords: {
       type: [String],
       required: true,

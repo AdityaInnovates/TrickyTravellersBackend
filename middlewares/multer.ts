@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
     };
   },
 });
-const file = multer({
+const upload = multer({
   storage,
   fileFilter: function (req, file, cb) {
     if (
@@ -30,4 +30,4 @@ const file = multer({
     fileSize: 1024 * 1024,
   },
 });
-export default file;
+export default upload;

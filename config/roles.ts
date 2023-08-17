@@ -10,6 +10,7 @@ rights.set(roles[0], [
   "event-update",
   "event-read",
   "category-read",
+  "destination-read",
   "profile",
 ]);
 rights.set(roles[1], [
@@ -25,4 +26,8 @@ rights.set(roles[1], [
   "category-update",
   "category-read",
   "category-delete",
+  "destination-create",
+  "destination-update",
+  "destination-read",
+  "destination-delete",
 ]);

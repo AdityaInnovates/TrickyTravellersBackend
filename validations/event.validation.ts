@@ -20,6 +20,7 @@ export const create = {
     price: joi.number().required(),
     slug: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
+    category_id: joi.string().trim().required(),
   }),
 };
 
@@ -34,5 +35,6 @@ export const update = {
     price: joi.number().required(),
     slug: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
+    category_id: joi.string().trim().required(),
   }),
 };

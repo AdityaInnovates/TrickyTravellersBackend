@@ -5,7 +5,7 @@ import categoryRoute from "./category.route";
 import authRoute from "./auth.route";
 import blogRoute from "./blog.route";
 import eventRoute from "./event.route";
-
+import destinationRoute from "./destination.route";
 const router = Router();
 
 if (config.env === "development") {
@@ -16,4 +16,5 @@ router.use("/categories", categoryRoute);
 router.use("/blogs", blogRoute);
 router.use("/auth", authRoute);
 router.use("/events", eventRoute);
+router.use("/destinations", destinationRoute);
 export default router;

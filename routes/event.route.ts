@@ -5,13 +5,14 @@ import validate from "../middlewares/validate";
 import { EventValidation } from "../validations";
 
 import auth from "../middlewares/auth";
+import upload from "../middlewares/multer";
 const router = Router();
 
 router.get("/", EventController.get);
 router.post(
   "/",
-  auth("event-update"),
-
+  auth("event-create"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validate(EventValidation.create),
   EventController.create
 );
