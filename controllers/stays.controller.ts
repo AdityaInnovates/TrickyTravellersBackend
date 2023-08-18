@@ -6,7 +6,7 @@ import { StaysService } from "../services";
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await StaysService.query(
     req.query.slug ? { slug: req.query.slug } : {},
-    { ...req.query, populate: "created_by,category_id" }
+    { ...req.query, populate: "user_id" }
   );
   return res.json(data);
 });
@@ -16,7 +16,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
   const data = await StaysService.create({
     ...req.body,
     files: req.files,
-    created_by: user.id,
+    user_id: user.id,
   });
 
   return res.json(data);

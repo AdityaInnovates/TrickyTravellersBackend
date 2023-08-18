@@ -1,4 +1,4 @@
-import { BlogController } from "../controllers";
+import { StaysController } from "../controllers";
 
 import { Router } from "express";
 import validate from "../middlewares/validate";
@@ -7,20 +7,20 @@ import upload from "../middlewares/multer";
 import auth from "../middlewares/auth";
 const router = Router();
 
-router.get("/", BlogController.get);
+router.get("/", StaysController.get);
 router.post(
   "/",
   auth("stays-update"),
   upload.fields([{ name: "image", maxCount: 1 }]),
 
   validate(StaysValidation.create),
-  BlogController.create
+  StaysController.create
 );
 router.delete(
   "/:id",
   auth("stays-delete"),
 
-  BlogController.deleteDocument
+  StaysController.deleteDocument
 );
 router.put(
   "/:id",
@@ -28,8 +28,8 @@ router.put(
   upload.fields([{ name: "image", maxCount: 1 }]),
   validate(StaysValidation.update),
 
-  BlogController.update
+  StaysController.update
 );
-router.get("/single/:id", BlogController.getSingle);
+router.get("/single/:id", StaysController.getSingle);
 
 export default router;

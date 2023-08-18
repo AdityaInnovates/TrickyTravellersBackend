@@ -3,7 +3,7 @@ import { Stays as Model } from "../models";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id).populate(["created_by"]);
+  const data = await Model.findById(id).populate(["user_id"]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
@@ -11,22 +11,21 @@ export const getById = async (id: string) => {
 };
 
 export const create = async (data: any) => {
-  const blog = await Model.create({
+  const stays = await Model.create({
     ...data,
     image: data.files.image[0].path,
   });
-  return blog;
+  return stays;
 };
 
 export const query = async (filter: any, options: any) => {
   if (Object.keys(filter).length > 0) {
-    const result = await Model.find(filter).populate([
-      "created_by",
-      "category_id",
-    ]);
+    const result = await Model.find(filter).populate(["user_id"]);
+    console.log(result);
     return result;
   }
   const result = await Model.paginate(filter, options);
+  console.log(result);
   return result;
 };
 
