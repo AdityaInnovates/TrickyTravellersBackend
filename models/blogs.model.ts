@@ -50,7 +50,7 @@ const schema = new Schema<Blog>(
     approved_by: {
       type: Schema.Types.ObjectId,
       ref: "users",
-      required: true,
+      required: false,
     },
     visit_count: { type: Number, required: true, default: 0 },
     // extra_image: {
