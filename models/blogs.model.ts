@@ -12,7 +12,7 @@ export interface Blog {
   approved_by?: Types.ObjectId;
   status: number;
   featured: string;
-  slug: string;
+  slug?: string;
   reject_reason?: string;
 }
 
@@ -40,7 +40,7 @@ const schema = new Schema<Blog>(
     },
     slug: {
       type: String,
-      required: true,
+      required: false,
     },
     created_by: {
       type: Schema.Types.ObjectId,

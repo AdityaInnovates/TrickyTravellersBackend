@@ -18,7 +18,7 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
-    slug: data.title.toLowerCase().split(" ").join("-"),
+    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
     featured: data.files.featured[0].path,
     // extra_image: data.files.extra_image[0].path,
   });
@@ -41,7 +41,7 @@ export const update = async (id: string, data: any) => {
   const result = await getById(id);
   Object.assign(result, {
     ...data,
-    slug: data.title.toLowerCase().split(" ").join("-"),
+    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
     ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
     // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });
