@@ -5,7 +5,6 @@ export const create = {
     title: joi.string().required().trim(),
     content: joi.string().required().trim(),
     category_id: joi.string().required().trim(),
-    slug: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
   }),
 };
@@ -16,7 +15,14 @@ export const update = {
     title: joi.string().required().trim(),
     content: joi.string().required().trim(),
     category_id: joi.string().required().trim(),
-    slug: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
+  }),
+};
+
+export const agentUpdate = {
+  params: joi.object({ id: joi.string().required().trim() }),
+  body: joi.object({
+    status: joi.number().required().max(2).min(1),
+    reject_reason: joi.string().trim().optional(),
   }),
 };

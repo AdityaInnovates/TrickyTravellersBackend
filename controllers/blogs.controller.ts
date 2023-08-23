@@ -5,7 +5,7 @@ import { BlogService } from "../services";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
-    req.query.slug ? { slug: req.query.slug } : {},
+    req.query.slug ? { slug: req.query.slug } : { ...req.query },
     { ...req.query, populate: "created_by,category_id" }
   );
   return res.json(data);
@@ -28,7 +28,7 @@ export const deleteDocument = catchAsync(
     return res.json(data);
   }
 );
-  
+
 export const update = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.update(req.params.id, {
     ...req.body,
@@ -40,5 +40,14 @@ export const update = catchAsync(async (req: Request, res: Response) => {
 export const getSingle = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.getById(req.params.id);
 
+  return res.json(data);
+});
+
+export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await BlogService.agentUpdate(req.params.id, {
+    approved_by: user.id,
+    ...req.body,
+  });
   return res.json(data);
 });

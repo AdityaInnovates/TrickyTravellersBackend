@@ -8,10 +8,12 @@ export interface Blog {
   keywords: [string];
   visit_count?: number;
   created_by: Types.ObjectId;
-  extra_image: string;
+  // extra_image: string;
+  approved_by?: Types.ObjectId;
   status: number;
   featured: string;
   slug: string;
+  reject_reason?: string;
 }
 
 interface BlogModel extends Model<Blog> {
@@ -45,15 +47,24 @@ const schema = new Schema<Blog>(
       ref: "users",
       required: true,
     },
-    visit_count: { type: Number, required: true, default: 0 },
-    extra_image: {
-      type: String,
+    approved_by: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
       required: true,
     },
+    visit_count: { type: Number, required: true, default: 0 },
+    // extra_image: {
+    //   type: String,
+    //   required: true,
+    // },
     status: {
       type: Number,
       required: true,
       default: 0,
+    },
+    reject_reason: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

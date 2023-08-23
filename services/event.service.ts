@@ -37,3 +37,7 @@ export const deleteDocument = async (id: string) => {
   await data.remove();
   return "Entry Deleted";
 };
+
+export const agentUpdate = async (id: string, data: any) => {
+  return await update(id, data);
+};

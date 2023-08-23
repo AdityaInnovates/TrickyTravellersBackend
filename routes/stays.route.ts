@@ -30,6 +30,13 @@ router.put(
 
   StaysController.update
 );
+
+router.put(
+  "/agent/:id",
+  auth("stays-review"),
+  validate(StaysValidation.agentUpdate),
+  StaysController.agentUpdate
+);
 router.get("/single/:id", StaysController.getSingle);
 
 export default router;

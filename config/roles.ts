@@ -38,3 +38,15 @@ rights.set(roles[1], [
   "stays-read",
   "stays-delete",
 ]);
+
+rights.set(roles[2], [
+  "blog-review",
+  "blog-update",
+  "blog-read",
+  "event-review",
+  "event-update",
+  "event-read",
+  "stays-review",
+  "stays-update",
+  "stays-read",
+]);

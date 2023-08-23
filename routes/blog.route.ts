@@ -12,7 +12,7 @@ router.post(
   "/",
   auth("blog-update"),
   upload.fields([
-    { name: "extra_image", maxCount: 1 },
+    // { name: "extra_image", maxCount: 1 },
     { name: "featured", maxCount: 1 },
   ]),
 
@@ -29,7 +29,7 @@ router.put(
   "/:id",
   auth("blog-update"),
   upload.fields([
-    { name: "extra_image", maxCount: 1 },
+    // { name: "extra_image", maxCount: 1 },
     { name: "featured", maxCount: 1 },
   ]),
   validate(BlogValidation.update),
@@ -37,5 +37,12 @@ router.put(
   BlogController.update
 );
 router.get("/single/:id", BlogController.getSingle);
+
+router.put(
+  "/agent/:id",
+  auth("blog-review"),
+  validate(BlogValidation.agentUpdate),
+  BlogController.agentUpdate
+);
 
 export default router;

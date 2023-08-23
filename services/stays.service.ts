@@ -33,7 +33,7 @@ export const update = async (id: string, data: any) => {
   const result = await getById(id);
   Object.assign(result, {
     ...data,
-    ...(data.files.image ? { image: data.files.image[0].path } : {}),
+    ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   await result.save();
   return result;
@@ -43,4 +43,8 @@ export const deleteDocument = async (id: string) => {
   const data = await getById(id);
   await data.remove();
   return "Entry Deleted";
+};
+
+export const agentUpdate = async (id: string, data: any) => {
+  return await update(id, data);
 };

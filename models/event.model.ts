@@ -15,6 +15,8 @@ export interface Event {
   created_by: Types.ObjectId;
   venue: string;
   video?: string;
+  approved_by?: Types.ObjectId;
+  reject_reason?: string;
 }
 
 interface EventModel extends Model<Event> {
@@ -67,6 +69,15 @@ const schema = new Schema<Event>(
     location_id: {
       type: String,
       required: true,
+    },
+    approved_by: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: false,
+    },
+    reject_reason: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

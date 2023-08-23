@@ -39,3 +39,12 @@ export const getSingle = catchAsync(async (req: Request, res: Response) => {
 
   return res.json(data);
 });
+
+export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await EventService.agentUpdate(req.params.id, {
+    approved_by: user.id,
+    ...req.body,
+  });
+  return res.json(data);
+});

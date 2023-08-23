@@ -30,4 +30,11 @@ router.put(
 );
 router.get("/single/:id", EventController.getSingle);
 
+router.put(
+  "/agent/:id",
+  auth("event-review"),
+  validate(EventValidation.agentUpdate),
+  EventController.agentUpdate
+);
+
 export default router;

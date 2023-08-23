@@ -4,7 +4,11 @@ import { Blog } from "../models/blogs.model";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id).populate(["category_id", "created_by"]);
+  const data = await Model.findById(id).populate([
+    "category_id",
+    "created_by",
+    "approved_by",
+  ]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
@@ -14,8 +18,9 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
+    slug: data.title.toLowerCase().split(" ").join("-"),
     featured: data.files.featured[0].path,
-    extra_image: data.files.extra_image[0].path,
+    // extra_image: data.files.extra_image[0].path,
   });
   return blog;
 };
@@ -36,8 +41,9 @@ export const update = async (id: string, data: any) => {
   const result = await getById(id);
   Object.assign(result, {
     ...data,
-    ...(data.files.featured ? { featured: data.files.featured[0].path } : {}),
-    ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
+    slug: data.title.toLowerCase().split(" ").join("-"),
+    ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
+    // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });
   await result.save();
   return result;
@@ -47,4 +53,8 @@ export const deleteDocument = async (id: string) => {
   const data = await getById(id);
   await data.remove();
   return "Entry Deleted";
+};
+
+export const agentUpdate = async (id: string, data: any) => {
+  return await update(id, data);
 };
