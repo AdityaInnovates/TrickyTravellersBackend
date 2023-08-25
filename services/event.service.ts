@@ -4,7 +4,7 @@ import { Event } from "../models/event.model";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id);
+  const data = await Model.findById(id).populate("category_id", "created_by");
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
@@ -14,6 +14,8 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
+    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
+    ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   return blog;
 };
@@ -27,6 +29,8 @@ export const update = async (id: string, data: any) => {
   const result = await getById(id);
   Object.assign(result, {
     ...data,
+    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
+    ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   await result.save();
   return result;

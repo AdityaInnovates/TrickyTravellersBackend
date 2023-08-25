@@ -25,6 +25,7 @@ router.delete(
 router.put(
   "/:id",
   auth("event-update"),
+  upload.fields([{ name: "image", maxCount: 1 }]),
   validate(EventValidation.update),
   EventController.update
 );
