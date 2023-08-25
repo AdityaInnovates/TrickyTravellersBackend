@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 import { EventService } from "../services";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
-  const data = await EventService.query({ ...req.params }, {});
+  const data = await EventService.query({ ...req.query }, {});
   return res.json(data);
 });
 
