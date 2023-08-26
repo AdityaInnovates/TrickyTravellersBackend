@@ -5,8 +5,6 @@ import validate from "../middlewares/validate";
 import { StaysValidation } from "../validations";
 import upload from "../middlewares/multer";
 import auth from "../middlewares/auth";
-import paginate from "./plugins/paginate";
-import toJSON from "./plugins/toJSON";
 const router = Router();
 
 router.get("/", StaysController.get);
