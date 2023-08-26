@@ -1,6 +1,7 @@
 import { Schema, model, Model, Document } from "mongoose";
 import crypto from "crypto";
-
+import paginate from "./plugins/paginate";
+import toJSON from "./plugins/toJSON";
 export interface User extends Document {
   name: string;
   password: string;
@@ -88,6 +89,7 @@ schema.pre("save", async function (next: any) {
   }
   next();
 });
-
+schema.plugin(paginate);
+schema.plugin(toJSON);
 const userModel = model<User, UserModel>("users", schema);
 export default userModel;
