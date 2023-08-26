@@ -3,7 +3,7 @@ import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
 export interface Event {
   body: string;
-  date: Date;
+  date: string;
   keywords: [string];
   location_id: string;
   image: string;
@@ -27,7 +27,7 @@ const schema = new Schema<Event>(
   {
     title: { type: String, required: true },
     body: { type: String, required: true },
-    date: { type: Date, required: true },
+    date: { type: String, required: true },
     image: { type: String, required: true },
     category_id: {
       type: Schema.Types.ObjectId,
