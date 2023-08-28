@@ -12,7 +12,7 @@ export const sendVerifyEmail = (email: string, token: string) => {
   var mailOptions = {
     from: config.nodemailer.email,
     to: email,
-    subject: "Forgot Password Email",
+    subject: "Verify Email",
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +25,7 @@ export const sendVerifyEmail = (email: string, token: string) => {
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;" >
     <h1>Verify Account</h1>
     <h3>Please click on the link below to verify your account.</h3>
-    <a href="${config.nodemailer.redirect}/verify/${token}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here to verify your account </a>
+    <a href="${config.nodemailer.redirect}/verify?token=${token}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here to verify your account </a>
 </div>
     </body>
 </html>`,
