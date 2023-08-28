@@ -42,19 +42,20 @@ export const query = async (filter: any, options: any) => {
 };
 
 export const update = async (id: string, data: any) => {
-  const result = await getById(id);
+  const result: any = await Model.findById(id);
   Object.assign(result, {
     ...data,
     slug: data.title
       ? data?.title?.toLowerCase()?.split(" ").join("-")
       : result.title.toLowerCase().split(" ").join("-") +
         "-" +
-        result.created_by._id.toString(),
+        result.created_by,
     ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
     // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });
   await result.save();
-  return result;
+  const blog = await getById(id);
+  return blog;
 };
 
 export const deleteDocument = async (id: string) => {
