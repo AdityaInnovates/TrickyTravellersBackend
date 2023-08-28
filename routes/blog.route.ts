@@ -44,5 +44,11 @@ router.put(
   validate(BlogValidation.agentUpdate),
   BlogController.agentUpdate
 );
+router.put(
+  "/comment/:id",
+  auth("blog-update"),
+  validate(BlogValidation.comment),
+  BlogController.comment
+);
 
 export default router;

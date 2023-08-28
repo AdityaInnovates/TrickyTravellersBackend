@@ -55,3 +55,12 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
   });
   return res.json(data);
 });
+
+export const comment = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await BlogService.comment(req.params.id, {
+    ...req.body,
+    user_id: user.id,
+  });
+  res.json(data);
+});

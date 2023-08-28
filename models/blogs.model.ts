@@ -1,6 +1,12 @@
 import { Schema, model, Model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
+
+export interface Comment {
+  user_id: Types.ObjectId;
+  comment: string;
+}
+
 export interface Blog {
   title: string;
   content: string;
@@ -15,11 +21,17 @@ export interface Blog {
   slug?: string;
   reject_reason?: string;
   updated_by: string;
+  comments: [Comment];
 }
 
 interface BlogModel extends Model<Blog> {
   paginate: any;
 }
+
+const comment = new Schema<Comment>({
+  user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
+  comment: { type: String, required: true },
+});
 
 const schema = new Schema<Blog>(
   {
@@ -70,6 +82,11 @@ const schema = new Schema<Blog>(
     updated_by: {
       type: String,
       required: true,
+    },
+    comments: {
+      type: [comment],
+      required: true,
+      default: [],
     },
   },
   { timestamps: true }

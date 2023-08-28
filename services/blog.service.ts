@@ -8,6 +8,7 @@ export const getById = async (id: string) => {
     "category_id",
     "created_by",
     "approved_by",
+    "comments.user_id",
   ]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
@@ -29,8 +30,10 @@ export const create = async (data: any) => {
 export const query = async (filter: any, options: any) => {
   if (Object.keys(filter).length > 0) {
     const categories = await Model.find(filter).populate([
-      "created_by",
       "category_id",
+      "created_by",
+      "approved_by",
+      "comments.user_id",
     ]);
     return categories;
   }
@@ -61,4 +64,12 @@ export const deleteDocument = async (id: string) => {
 
 export const agentUpdate = async (id: string, data: any) => {
   return await update(id, data);
+};
+
+export const comment = async (id: string, data: any) => {
+  const result = await Model.findById(id);
+  result?.comments.push(data);
+  await result?.save();
+  const blog = await getById(id);
+  return blog;
 };

@@ -26,3 +26,8 @@ export const agentUpdate = {
     reject_reason: joi.string().trim().optional(),
   }),
 };
+
+export const comment = {
+  params: joi.object({ id: joi.string().required().trim() }),
+  body: joi.object({ comment: joi.string().trim().required() }),
+};
