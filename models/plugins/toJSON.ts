@@ -28,7 +28,7 @@ const toJSON = (schema: any) => {
         }
       });
 
-      ret.id = ret._id.toString();
+      if (ret._id) ret.id = ret._id.toString();
       if (ret.password) ret.password = ret.password.slice(0, ret.pass_len);
       delete ret.__v;
 

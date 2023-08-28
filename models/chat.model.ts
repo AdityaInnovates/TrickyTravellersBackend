@@ -1,4 +1,6 @@
 import { Schema, model, Types } from "mongoose";
+import paginate from "./plugins/paginate";
+import toJSON from "./plugins/toJSON";
 export interface Messages {
   sender: Types.ObjectId;
   message: string;
@@ -27,6 +29,12 @@ const schema = new Schema<Chat>(
   },
   { timestamps: true }
 );
+
+messageschema.plugin(toJSON);
+messageschema.plugin(paginate);
+
+schema.plugin(toJSON);
+schema.plugin(paginate);
 
 const userModel = model<Chat>("chats", schema);
 export default userModel;

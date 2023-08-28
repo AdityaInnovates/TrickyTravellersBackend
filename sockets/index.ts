@@ -4,33 +4,40 @@ import app from "../app";
 
 const socket = (server: Server, users: any) => {
   server.on("connection", (socket: Socket) => {
+    socket.join(socket.id);
     socket.on("add user", (user) => {
       console.log("user added", socket.id);
-      users.push({ id: socket.id, user });
+      const index = users.findIndex((item: any) => item.user.id === user.id);
+      if (index < 0) {
+        users.push({ id: socket.id, user });
+      } else {
+        users[index] = { id: socket.id, user };
+      }
+      console.log(users);
     });
 
     socket.on("new message", async (data: any) => {
-      const chat: any = await Chat.findOne({
-        $and: [
-          { users: { $in: [data.sender] } },
-          { users: { $in: [data.receiver] } },
-        ],
-      }).populate([{ path: "users" }, { path: "messages.sender" }]);
-      const receiver = users.find(
-        (item: any) => item.user.id === data.receiver
-      );
+      const chat: any = await Chat.findById(data.id).populate([
+        { path: "users" },
+        { path: "messages.sender" },
+      ]);
+
+      const receiver = users.find((item: any) => {
+        return (
+          item.user.id ===
+          chat.users.find((item: any) => item._id.toString() !== data.sender)
+        );
+      });
       const sender = users.find((item: any) => item.user.id === data.sender);
 
       chat.messages.push({ sender: data.sender, message: data.message });
       chat.save();
-      const arr: string[] = [sender.id];
 
       if (receiver) {
-        arr.push(receiver.id);
+        socket.to(receiver.id).emit("message", chat);
       }
-      console.log(receiver.id);
 
-      socket.to(arr).emit("message", chat);
+      socket.emit("message", chat);
     });
 
     socket.on("get messages", async (id) => {
@@ -38,6 +45,7 @@ const socket = (server: Server, users: any) => {
         { path: "users" },
         { path: "messages.sender" },
       ]);
+
       socket.emit("messages", chat);
     });
     socket.on("get chats", async (id) => {
@@ -80,7 +88,8 @@ const socket = (server: Server, users: any) => {
 
     socket.on("disconnect", () => {
       console.log("disconnected", socket.id);
-      users.filter((item: any) => item.id !== socket.id);
+
+      users = users.filter((item: any) => item.id !== socket.id);
     });
     app.set("socket", socket);
     app.set("socket_users", users);
