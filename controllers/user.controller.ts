@@ -43,3 +43,11 @@ export const change_password = catchAsync(
     res.json("Password Updated");
   }
 );
+
+export const get = catchAsync(async (req: Request, res: Response) => {
+  const data = await UserService.query(
+    req.query.slug ? { slug: req.query.slug, ...req.query } : {},
+    { ...req.query }
+  );
+  return res.json(data);
+});

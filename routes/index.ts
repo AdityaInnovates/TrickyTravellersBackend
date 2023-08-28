@@ -7,6 +7,7 @@ import blogRoute from "./blog.route";
 import eventRoute from "./event.route";
 import destinationRoute from "./destination.route";
 import staysRoute from "./stays.route";
+import userRoute from "./user.route";
 const router = Router();
 
 if (config.env === "development") {
@@ -19,4 +20,5 @@ router.use("/auth", authRoute);
 router.use("/events", eventRoute);
 router.use("/destinations", destinationRoute);
 router.use("/stays", staysRoute);
+router.use("/users", userRoute);
 export default router;

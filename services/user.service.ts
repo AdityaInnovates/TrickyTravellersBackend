@@ -23,6 +23,11 @@ export const findUser = async (email: string) => {
   return user;
 };
 
+export const query = async (filter: any, options: any) => {
+  const users = await Model.paginate(filter, options);
+  return users;
+};
+
 export const login = async (data: { email: string; password: string }) => {
   const user = await findUser(data.email);
   if (!user.active) {
