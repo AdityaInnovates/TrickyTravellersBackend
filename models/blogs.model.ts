@@ -14,6 +14,7 @@ export interface Blog {
   featured: string;
   slug?: string;
   reject_reason?: string;
+  updated_by: string;
 }
 
 interface BlogModel extends Model<Blog> {
@@ -65,6 +66,10 @@ const schema = new Schema<Blog>(
     reject_reason: {
       type: String,
       required: false,
+    },
+    updated_by: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
