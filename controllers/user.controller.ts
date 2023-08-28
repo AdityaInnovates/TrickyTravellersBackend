@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TokenService, UserService } from "../services";
+import { MailService, TokenService, UserService } from "../services";
 import catchAsync from "../utils/catchAsync";
 
 export const login = catchAsync(async (req: Request, res: Response) => {
@@ -11,6 +11,8 @@ export const login = catchAsync(async (req: Request, res: Response) => {
 export const register = catchAsync(async (req: Request, res: Response) => {
   console.log(req.body);
   const user = await UserService.createUser(req.body);
+  const token = await TokenService.generateToken(user);
+  await MailService.sendVerifyEmail(req.body.email, token);
   return res.json("User Has Been created");
 });
 
@@ -21,6 +23,12 @@ export const update_profile = catchAsync(
     res.json(data);
   }
 );
+
+export const verify = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await UserService.updateUser({ active: true }, user);
+  res.status(200).send("User Verified");
+});
 
 export const change_password = catchAsync(
   async (req: Request, res: Response) => {

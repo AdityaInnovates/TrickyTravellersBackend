@@ -3,6 +3,7 @@ export const roles = ["user", "admin", "agent"];
 export const rights = new Map();
 
 rights.set(roles[0], [
+  "verify",
   "blog-create",
   "blog-update",
   "blog-read",

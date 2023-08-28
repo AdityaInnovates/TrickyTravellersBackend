@@ -8,10 +8,11 @@ const jwtOptions = {
 
 const verifyJwt = async (payload: any, done: any) => {
   try {
-      const user = await User.findById(payload.id);
+    const user = await User.findById(payload.id);
     if (!user) {
       done(null, false);
     }
+
     done(null, user);
   } catch (error) {
     done(error, false);

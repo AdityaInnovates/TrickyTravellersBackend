@@ -16,7 +16,7 @@ const verifyCallback = (
       );
     }
     req.user = user;
-
+    console.log(req.route.path);
     if (requiredRights.length) {
       const userRights = rights.get(user.role);
       const hasRequiredRights = requiredRights.every((requiredRight: string) =>
@@ -25,7 +25,7 @@ const verifyCallback = (
       if (!hasRequiredRights && req.params.userId !== user.id) {
         return reject(new ApiError(StatusCodes.FORBIDDEN, "Forbidden"));
       }
-      if (!user.active) {
+      if (!user.active && req.route.path !== "/verify") {
         return reject(
           new ApiError(StatusCodes.FORBIDDEN, "Account not activated yet!")
         );

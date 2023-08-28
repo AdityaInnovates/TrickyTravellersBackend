@@ -14,6 +14,9 @@ const env = joi
     CLOUDINARY_CLOUD_NAME: joi.string().required(),
     CLOUDINARY_API_KEY: joi.string().required(),
     CLOUDINARY_API_SECRET: joi.string().required(),
+    NODEMAILER_EMAIL: joi.string().required(),
+    NODEMAILER_PASSWORD: joi.string().required(),
+    NODEMAILER_REDIRECT: joi.string().required(),
   })
   .unknown();
 
@@ -39,6 +42,11 @@ const vars = {
     cloud_name: value.CLOUDINARY_CLOUD_NAME,
     api_key: value.CLOUDINARY_API_KEY,
     api_secret: value.CLOUDINARY_API_SECRET,
+  },
+  nodemailer: {
+    email: value.NODEMAILER_EMAIL,
+    password: value.NODEMAILER_PASSWORD,
+    redirect: value.NODEMAILER_REDIRECT,
   },
 };
 

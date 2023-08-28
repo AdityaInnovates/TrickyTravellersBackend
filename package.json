@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/multer": "^1.4.7",
+    "@types/nodemailer": "^6.4.9",
     "cloudinary": "^1.37.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
@@ -39,6 +40,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
+    "nodemailer": "^6.9.4",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pm2": "^5.2.0",

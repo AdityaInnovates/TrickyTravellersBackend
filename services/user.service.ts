@@ -25,7 +25,9 @@ export const findUser = async (email: string) => {
 
 export const login = async (data: { email: string; password: string }) => {
   const user = await findUser(data.email);
-  console.log(user);
+  if (!user.active) {
+    throw new ApiError(StatusCodes.FORBIDDEN, "User not activated yet");
+  }
   const pass = await user.isPasswordMatch(data.password);
   console.log(pass);
   if (!pass) {

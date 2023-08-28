@@ -24,4 +24,6 @@ router.post(
   validate(UserValidation.update),
   UserController.update_profile
 );
+
+router.get("/verify", auth("verify"), UserController.verify);
 export default router;
