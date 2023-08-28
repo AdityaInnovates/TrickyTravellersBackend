@@ -43,7 +43,9 @@ export const update = async (id: string, data: any) => {
   Object.assign(result, {
     ...data,
     slug:
-      data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.created_by,
+      data?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      result.created_by,
     ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
     // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });

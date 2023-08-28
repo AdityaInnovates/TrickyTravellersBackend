@@ -32,12 +32,15 @@ const socket = (server: Server, users: any) => {
 
       chat.messages.push({ sender: data.sender, message: data.message });
       chat.save();
-
+      const newChat = await Chat.findById(data.id).populate([
+        { path: "users" },
+        { path: "messages.sender" },
+      ]);
       if (receiver) {
-        socket.to(receiver.id).emit("message", chat);
+        socket.to(receiver.id).emit("message", newChat);
       }
 
-      socket.emit("message", chat);
+      socket.emit("message", newChat);
     });
 
     socket.on("get messages", async (id) => {
