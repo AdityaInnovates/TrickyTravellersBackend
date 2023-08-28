@@ -28,7 +28,7 @@ export const update = {
 export const agentUpdate = {
   params: joi.object({ id: joi.string().required().trim() }),
   body: joi.object({
-    status: joi.number().required().max(2).min(1),
+    status: joi.number().required().min(1),
     reject_reason: joi.string().trim().optional(),
   }),
 };
