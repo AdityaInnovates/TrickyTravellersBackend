@@ -24,6 +24,7 @@ export const findUser = async (email: string) => {
 };
 
 export const query = async (filter: any, options: any) => {
+  console.log(filter);
   const users = await Model.paginate(filter, options);
   return users;
 };

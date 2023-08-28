@@ -45,10 +45,11 @@ export const update = async (id: string, data: any) => {
   const result = await getById(id);
   Object.assign(result, {
     ...data,
-    slug:
-      data?.title?.toLowerCase()?.split(" ").join("-") +
-      "-" +
-      result.created_by,
+    slug: data.title
+      ? data?.title?.toLowerCase()?.split(" ").join("-")
+      : result.title.toLowerCase().split(" ").join("-") +
+        "-" +
+        result.created_by._id.toString(),
     ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
     // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });

@@ -89,7 +89,7 @@ schema.pre("save", async function (next: any) {
   }
   next();
 });
-schema.plugin(paginate);
 schema.plugin(toJSON);
+schema.plugin(paginate);
 const userModel = model<User, UserModel>("users", schema);
 export default userModel;
