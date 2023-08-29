@@ -40,8 +40,9 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     files: req.files,
     updated_by: user.role,
+    ...(user.role === "user" ? { status: 0 } : {}),
   });
-  if (user.role === "agent") {
+  if (user.role === "agent" && data.status !== 1) {
     const created_by: any = data.created_by;
     await MailService.sendBlogAgentUpdate(
       created_by.email,
@@ -65,6 +66,15 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     updated_by: user.role,
   });
+  if (req.body.status === 1) {
+    const created_by: any = data.created_by;
+    await MailService.sendBlogReject(
+      created_by.email,
+      user.name,
+      req.body.reject_reason,
+      data.title
+    );
+  }
 
   return res.json(data);
 });

@@ -65,3 +65,35 @@ export const sendBlogAgentUpdate = (
     console.log(info);
   });
 };
+
+export const sendBlogReject = (
+  email: string,
+  updatedBy: string,
+  remark: string,
+  title: string
+) => {
+  var mailOptions = {
+    from: config.nodemailer.email,
+    to: email,
+    subject: "Blog Updates",
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div style="align-items:center;justify-content:center;width:100%;gap:10px" >
+    <h1 >Blog Update</h1>
+    <h3 style="margin-top:10px">An Agent (${updatedBy}) has rejected your blog with title "${title}"  </h3>
+    <p style="margin-top:10px">Reason: ${remark} </p>
+</div>
+    </body>
+</html>`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    console.log(info);
+  });
+};
