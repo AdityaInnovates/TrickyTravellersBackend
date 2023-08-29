@@ -20,7 +20,7 @@ export const create = async (data: any) => {
 
 export const query = async (filter: any, options: any) => {
   if (Object.keys(filter).length > 0) {
-    const result = await Model.paginate(filter).populate(["user_id"]);
+    const result = await Model.find(filter).populate(["user_id"]);
     console.log(result);
     return result;
   }

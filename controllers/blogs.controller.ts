@@ -6,7 +6,11 @@ import { BlogService, MailService } from "../services";
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
     req.query.slug ? { slug: req.query.slug } : { ...req.query },
-    { ...req.query, populate: "created_by,category_id" }
+    {
+      ...req.query,
+      populate: "created_by,category_id,approved_by",
+      sortBy: "-updatedAt",
+    }
   );
   return res.json(data);
 });
@@ -37,6 +41,14 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     files: req.files,
     updated_by: user.role,
   });
+  if (user.role === "agent") {
+    const created_by: any = data.created_by;
+    await MailService.sendBlogAgentUpdate(
+      created_by.email,
+      user.name,
+      "/blogs/" + data.slug
+    );
+  }
   return res.json(data);
 });
 
@@ -53,12 +65,7 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     updated_by: user.role,
   });
-  const created_by: any = data.created_by;
-  await MailService.sendBlogAgentUpdate(
-    created_by.email,
-    user.name,
-    "/blogs/" + data.id
-  );
+
   return res.json(data);
 });
 

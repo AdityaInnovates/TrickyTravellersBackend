@@ -50,4 +50,5 @@ rights.set(roles[2], [
   "stays-review",
   "stays-update",
   "stays-read",
+  "profile",
 ]);
