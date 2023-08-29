@@ -3,6 +3,7 @@ import { UserController } from "../controllers";
 import validate from "../middlewares/validate";
 import { UserValidation } from "../validations";
 import auth from "../middlewares/auth";
+import upload from "../middlewares/multer";
 
 const router = Router();
 
@@ -21,6 +22,10 @@ router.post(
 router.post(
   "/update-profile",
   auth("profile"),
+  upload.fields([
+    { name: "profile", maxCount: 1 },
+    { name: "cover", maxCount: 1 },
+  ]),
   validate(UserValidation.update),
   UserController.update_profile
 );

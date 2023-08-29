@@ -19,7 +19,10 @@ export const register = catchAsync(async (req: Request, res: Response) => {
 export const update_profile = catchAsync(
   async (req: Request, res: Response) => {
     const user: any = req.user;
-    const data = await UserService.updateUser(req.body, user);
+    const data = await UserService.updateUser(
+      { ...req.body, files: req.files },
+      user
+    );
     res.json(data);
   }
 );

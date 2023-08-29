@@ -12,6 +12,7 @@ export interface User extends Document {
   google_id?: string;
   remember_token?: string;
   profile_photo_path?: string;
+  cover_photo_path?: string;
   isPasswordMatch(password: string): boolean;
 }
 
@@ -53,6 +54,10 @@ const schema = new Schema<User>(
       default: false,
     },
     profile_photo_path: {
+      type: String,
+      required: false,
+    },
+    cover_photo_path: {
       type: String,
       required: false,
     },
