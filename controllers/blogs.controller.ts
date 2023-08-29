@@ -46,7 +46,7 @@ export const update = catchAsync(async (req: Request, res: Response) => {
     await MailService.sendBlogAgentUpdate(
       created_by.email,
       user.name,
-      "/blogs/edit/" + data.id
+      "/blogs/" + data.slug
     );
   }
   return res.json(data);
