@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 
-import { BlogService } from "../services";
+import { BlogService, MailService } from "../services";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
@@ -53,6 +53,12 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     updated_by: user.role,
   });
+  const created_by: any = data.created_by;
+  await MailService.sendBlogAgentUpdate(
+    created_by.email,
+    user.name,
+    "/blogs/" + data.id
+  );
   return res.json(data);
 });
 
