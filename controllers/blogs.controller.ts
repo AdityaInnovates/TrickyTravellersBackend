@@ -22,6 +22,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     files: req.files,
     created_by: user.id,
     updated_by: user.role,
+    ...(user.role === "agent" ? { status: 2 } : {}),
   });
 
   return res.json(data);
@@ -75,7 +76,14 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
       data.title
     );
   }
-
+  if (req.body.status === 2) {
+    const created_by: any = data.created_by;
+    await MailService.sendBlogAccept(
+      created_by.email,
+      user.name,
+      "/blogs/" + data.slug
+    );
+  }
   return res.json(data);
 });
 

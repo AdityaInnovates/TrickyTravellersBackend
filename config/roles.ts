@@ -51,4 +51,6 @@ rights.set(roles[2], [
   "stays-update",
   "stays-read",
   "profile",
+  "event-create",
+  "blog-create",
 ]);

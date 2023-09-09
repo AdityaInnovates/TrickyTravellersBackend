@@ -32,7 +32,10 @@ const paginate = (schema: any) => {
       sort = "createdAt";
     }
     const limit =
-      options.limit && parseInt(options.limit, 10) > 0 ? options.limit : 10;
+      options.limit && parseInt(options.limit, 10) > 0
+        ? parseInt(options.limit, 10)
+        : 10;
+
     const page =
       options.page && parseInt(options.page, 10) > 0
         ? parseInt(options.page, 10)
@@ -60,6 +63,7 @@ const paginate = (schema: any) => {
 
     return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values;
+
       const totalPages = Math.ceil(totalResults / limit);
       const result = {
         results,
