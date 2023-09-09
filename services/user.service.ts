@@ -53,8 +53,10 @@ export const updateUser = async (body: any, user: any) => {
   console.log(body, user);
   Object.assign(user, {
     ...body,
-    ...(body.files.cover ? { cover_photo_path: body.files.cover[0].path } : {}),
-    ...(body.files.profile
+    ...(body.files?.cover
+      ? { cover_photo_path: body.files.cover[0].path }
+      : {}),
+    ...(body.files?.profile
       ? { profile_photo_path: body.files.profile[0].path }
       : {}),
   });
