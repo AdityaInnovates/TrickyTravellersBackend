@@ -1,6 +1,12 @@
 import { Schema, model, Model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
+
+export interface FAQ {
+  question: string;
+  answer: any;
+}
+
 export interface Event {
   body: string;
   date: string;
@@ -17,6 +23,7 @@ export interface Event {
   video?: string;
   approved_by?: Types.ObjectId;
   reject_reason?: string;
+  faqs: [FAQ];
 }
 
 interface EventModel extends Model<Event> {
@@ -78,6 +85,12 @@ const schema = new Schema<Event>(
     reject_reason: {
       type: String,
       required: false,
+    },
+    faqs: {
+      type: [
+        { question: { type: String, required: true } },
+        { answer: { type: String, required: true } },
+      ],
     },
   },
   { timestamps: true }
