@@ -1,13 +1,16 @@
 import { Server, Socket } from "socket.io";
 import { Chat } from "../models";
 import app from "../app";
+import watch from "../utils/watcher";
+import chatSockets from "./chat";
+import notificationSocket from "./notification";
 
 const socket = (server: Server, users: any) => {
   server.on("connection", (socket: Socket) => {
-    socket.join(socket.id);
     socket.on("add user", (user) => {
       console.log("user added", socket.id);
       const index = users.findIndex((item: any) => item.user.id === user.id);
+
       if (index < 0) {
         users.push({ id: socket.id, user });
       } else {
@@ -16,79 +19,8 @@ const socket = (server: Server, users: any) => {
       console.log(users);
     });
 
-    socket.on("new message", async (data: any) => {
-      const chat: any = await Chat.findById(data.id).populate([
-        { path: "users" },
-        { path: "messages.sender" },
-      ]);
-
-      const receiver = users.find((item: any) => {
-        return (
-          item.user.id ===
-          chat.users.find((item: any) => item._id.toString() !== data.sender)
-        );
-      });
-      const sender = users.find((item: any) => item.user.id === data.sender);
-
-      chat.messages.push({ sender: data.sender, message: data.message });
-      chat.save();
-      const newChat = await Chat.findById(data.id).populate([
-        { path: "users" },
-        { path: "messages.sender" },
-      ]);
-      if (receiver) {
-        socket.to(receiver.id).emit("message", newChat);
-      }
-
-      socket.emit("message", newChat);
-    });
-
-    socket.on("get messages", async (id) => {
-      const chat = await Chat.findById(id).populate([
-        { path: "users" },
-        { path: "messages.sender" },
-      ]);
-
-      socket.emit("messages", chat);
-    });
-    socket.on("get chats", async (id) => {
-      const chats = await Chat.find({
-        users: { $in: id },
-      })
-        .populate([{ path: "users" }, { path: "messages.sender" }])
-        .sort({ updatedAt: -1 });
-      socket.emit("chats", chats);
-    });
-
-    socket.on("new chat", async ({ sender, receiver }) => {
-      var chat = await Chat.findOne({
-        $and: [{ users: { $in: [sender] } }, { users: { $in: [receiver] } }],
-      });
-      const socket_receiver = users.find(
-        (item: any) => item.user.id === receiver
-      );
-      let isNewChat = false;
-      if (!chat) {
-        isNewChat = true;
-        chat = await Chat.create({ users: [sender, receiver] });
-      }
-      const chats = await Chat.findById(chat._id).populate([
-        { path: "users" },
-        { path: "messages.sender" },
-      ]);
-      const senderchats = await Chat.find({
-        users: { $in: sender },
-      }).populate([{ path: "users" }, { path: "messages.sender" }]);
-      socket.emit("newchat", { isNewChat, chats, allchats: senderchats });
-      const receiverchats = await Chat.find({
-        users: { $in: receiver },
-      }).populate([{ path: "users" }, { path: "messages.sender" }]);
-      socket_receiver &&
-        socket
-          .to(socket_receiver.id)
-          .emit("newchat", { allchats: receiverchats, isNewChat, chats });
-    });
-
+    chatSockets(socket, users);
+    notificationSocket(socket, users);
     socket.on("disconnect", () => {
       console.log("disconnected", socket.id);
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 
-import { BlogService, MailService } from "../services";
+import { BlogService, MailService, NotificationService } from "../services";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
@@ -45,6 +45,11 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   });
   if (user.role === "agent" && data.status !== 1) {
     const created_by: any = data.created_by;
+    await NotificationService.create(
+      created_by.id,
+      "Blog Update",
+      "Your Blog has been updated by an agent please check your email for further information "
+    );
     await MailService.sendBlogAgentUpdate(
       created_by.email,
       user.name,
@@ -75,6 +80,11 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
       req.body.reject_reason,
       data.title
     );
+    await NotificationService.create(
+      created_by.id,
+      "Blog Update",
+      "Your Blog has been rejected please check your email for further information "
+    );
   }
   if (req.body.status === 2) {
     const created_by: any = data.created_by;
@@ -82,6 +92,11 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
       created_by.email,
       user.name,
       "/blogs/" + data.slug
+    );
+    await NotificationService.create(
+      created_by.id,
+      "Blog Update",
+      "Your Blog has been approved please check your email for further information "
     );
   }
   return res.json(data);
