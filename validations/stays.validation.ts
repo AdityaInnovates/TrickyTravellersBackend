@@ -5,10 +5,11 @@ export const create = {
     title: joi.string().required().trim(),
     body: joi.string().required().trim(),
     address: joi.string().required().trim(),
-    slug: joi.string().required().trim(),
+
     keywords: joi.array().items(joi.string().required().trim()),
     price: joi.number().required(),
     facilities: joi.array().items(joi.any()),
+    discount: joi.number().optional().min(0).max(100),
   }),
 };
 
@@ -18,10 +19,11 @@ export const update = {
     title: joi.string().required().trim(),
     body: joi.string().required().trim(),
     address: joi.string().required().trim(),
-    slug: joi.string().required().trim(),
+
     keywords: joi.array().items(joi.string().required().trim()),
     price: joi.number().required(),
     facilities: joi.array().items(joi.any()),
+    discount: joi.number().optional().min(0).max(100),
   }),
 };
 

@@ -14,6 +14,7 @@ export const create = async (data: any) => {
   const stays = await Model.create({
     ...data,
     image: data.files.image[0].path,
+    slug: data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.user_id,
   });
   return stays;
 };
@@ -34,6 +35,12 @@ export const update = async (id: string, data: any) => {
   Object.assign(result, {
     ...data,
     ...(data.files?.image ? { image: data.files.image[0].path } : {}),
+    slug:
+      (data.title
+        ? data?.title?.toLowerCase()?.split(" ").join("-")
+        : result.title.toLowerCase().split(" ").join("-")) +
+      "-" +
+      result.user_id._id,
   });
   await result.save();
   return result;
