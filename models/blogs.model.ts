@@ -22,6 +22,7 @@ export interface Blog {
   reject_reason?: string;
   updated_by: string;
   comments: [Comment];
+  likes: [Types.ObjectId];
 }
 
 interface BlogModel extends Model<Blog> {
@@ -88,6 +89,7 @@ const schema = new Schema<Blog>(
       required: true,
       default: [],
     },
+    likes: { type: [Schema.Types.ObjectId], ref: "users", default: [] },
   },
   { timestamps: true }
 );
