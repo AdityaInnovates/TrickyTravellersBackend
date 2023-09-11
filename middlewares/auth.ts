@@ -39,6 +39,7 @@ const verifyCallback = (
 const auth =
   (...requiredRights: any) =>
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.headers);
     return new Promise((resolve, reject) => {
       passport.authenticate(
         "jwt",

@@ -26,7 +26,7 @@ router.put(
   "/:id",
   auth("event-update"),
   upload.fields([{ name: "image", maxCount: 1 }]),
-  validate(EventValidation.update),
+  validate(EventValidation.update, ["faqs"]),
   EventController.update
 );
 router.get("/single/:id", EventController.getSingle);

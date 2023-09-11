@@ -36,6 +36,7 @@ export const update = {
       .array()
       .items(
         joi.object({
+          _id: joi.string().trim().optional(),
           question: joi.string().trim().required(),
           answer: joi.string().trim().required(),
         })
