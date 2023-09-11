@@ -4,7 +4,7 @@ import toJSON from "./plugins/toJSON";
 
 export interface FAQ {
   question: string;
-  answer: any;
+  answer: string;
 }
 
 export interface Event {
@@ -88,8 +88,10 @@ const schema = new Schema<Event>(
     },
     faqs: {
       type: [
-        { question: { type: String, required: true } },
-        { answer: { type: String, required: true } },
+        {
+          question: { type: String, required: true },
+          answer: { type: String, required: true },
+        },
       ],
     },
   },
