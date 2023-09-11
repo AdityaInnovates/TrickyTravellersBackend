@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 export const getOrCreate = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
   const chat = await Chat.findOne({
-    users: { $in: [user.id, req.params.id] },
+    users: { $all: [user.id, req.params.id] },
   });
 
   if (chat) return res.json(chat.id);

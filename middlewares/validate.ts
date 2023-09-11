@@ -4,9 +4,20 @@ import pick from "../utils/pick";
 import ApiError from "../utils/ApiError";
 import { NextFunction, Request, Response } from "express";
 const validate =
-  (schema: any) => (req: Request, res: Response, next: NextFunction) => {
-    const validSchema = pick(schema, ["params", "query", "body"]);
+  (schema: any, keys: string[] = []) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    keys.forEach((obj) => {
+      if (typeof req.body[obj] === "string") {
+        req.body[obj] = JSON.parse(req.body[obj]);
+      }
+      console.log(req.body[obj]);
+      req.body[obj] = req.body[obj].map((item: any) =>
+        typeof item === "string" ? JSON.parse(item) : item
+      );
+    });
 
+    const validSchema = pick(schema, ["params", "query", "body"]);
+    console.log(req.body);
     const object = pick(req, Object.keys(validSchema));
 
     const { value, error } = joi

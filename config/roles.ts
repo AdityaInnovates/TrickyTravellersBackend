@@ -16,6 +16,7 @@ rights.set(roles[0], [
   "stays-update",
   "destination-read",
   "profile",
+  "chat",
 ]);
 rights.set(roles[1], [
   "blog-create",
@@ -38,6 +39,7 @@ rights.set(roles[1], [
   "stays-update",
   "stays-read",
   "stays-delete",
+  "chat",
 ]);
 
 rights.set(roles[2], [
@@ -53,4 +55,5 @@ rights.set(roles[2], [
   "profile",
   "event-create",
   "blog-create",
+  "chat",
 ]);

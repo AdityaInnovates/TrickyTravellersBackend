@@ -14,7 +14,7 @@ export const create = {
       faqs: joi.array().items(
         joi.object({
           question: joi.string().trim().required(),
-          answer: joi.string().trim().required,
+          answer: joi.string().trim().required(),
         })
       ),
     })
@@ -37,7 +37,7 @@ export const update = {
       .items(
         joi.object({
           question: joi.string().trim().required(),
-          answer: joi.string().trim().required,
+          answer: joi.string().trim().required(),
         })
       )
       .optional(),

@@ -13,7 +13,7 @@ router.post(
   "/",
   auth("event-create"),
   upload.fields([{ name: "image", maxCount: 1 }]),
-  validate(EventValidation.create),
+  validate(EventValidation.create, ["faqs"]),
   EventController.create
 );
 router.delete(
