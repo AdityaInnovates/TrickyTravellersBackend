@@ -42,6 +42,7 @@ export const update = {
         })
       )
       .optional(),
+    status: joi.number().equal(3).optional(),
   }),
 };
 

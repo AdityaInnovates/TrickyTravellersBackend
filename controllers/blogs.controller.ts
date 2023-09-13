@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 
 import { BlogService, MailService, NotificationService } from "../services";
+import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
@@ -37,11 +38,21 @@ export const deleteDocument = catchAsync(
 
 export const update = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
+
+  const blog = await BlogService.getById(req.params.id);
+  if (req.body.status) {
+    if (blog.status !== 2) {
+      throw new ApiError(403, "You cannot publish this blog");
+    }
+  }
+
   const data = await BlogService.update(req.params.id, {
     ...req.body,
     files: req.files,
     updated_by: user.role,
-    ...(user.role === "user" ? { status: 0 } : {}),
+    ...(user.role === "user"
+      ? { status: req.body.status ? req.body.status : 0 }
+      : {}),
   });
   if (user.role === "agent" && data.status !== 1) {
     const created_by: any = data.created_by;

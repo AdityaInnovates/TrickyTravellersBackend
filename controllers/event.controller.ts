@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 
 import { EventService, MailService, NotificationService } from "../services";
+import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await EventService.query(
@@ -21,6 +22,8 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     files: req.files,
     created_by: user.id,
+    updated_by: user.role,
+    ...(user.role === "agent" ? { status: 2 } : {}),
   });
 
   return res.json(data);
@@ -35,11 +38,19 @@ export const deleteDocument = catchAsync(
 
 export const update = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
+  const blog = await EventService.getById(req.params.id);
+  if (req.body.status) {
+    if (blog.status !== 2) {
+      throw new ApiError(403, "You cannot publish this event");
+    }
+  }
   const data = await EventService.update(req.params.id, {
     ...req.body,
     files: req.files,
     updated_by: user.role,
-    ...(user.role === "user" ? { status: 0 } : {}),
+    ...(user.role === "user"
+      ? { status: req.body.status ? req.body.status : 0 }
+      : {}),
   });
   if (user.role === "agent" && data.status !== 1) {
     const created_by: any = data.created_by;

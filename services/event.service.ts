@@ -18,7 +18,8 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
-    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
+    slug:
+      data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.created_by,
     ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   return blog;
@@ -30,14 +31,20 @@ export const query = async (filter: any, options: any) => {
 };
 
 export const update = async (id: string, data: any) => {
-  const result = await getById(id);
+  const result: any = await Model.findById(id);
   Object.assign(result, {
     ...data,
-    slug: data?.title?.toLowerCase()?.split(" ").join("-"),
+    slug:
+      (data.title
+        ? data?.title?.toLowerCase()?.split(" ").join("-")
+        : result.title.toLowerCase().split(" ").join("-")) +
+      "-" +
+      result.created_by,
     ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   await result.save();
-  return result;
+  const blog = await getById(id);
+  return blog;
 };
 
 export const deleteDocument = async (id: string) => {

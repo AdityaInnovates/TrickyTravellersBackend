@@ -24,6 +24,7 @@ export const update = {
     price: joi.number().required(),
     facilities: joi.array().items(joi.any()),
     discount: joi.number().optional().min(0).max(100),
+    status: joi.number().equal(3).optional(),
   }),
 };
 

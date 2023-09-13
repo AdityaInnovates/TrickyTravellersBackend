@@ -16,6 +16,7 @@ export const update = {
     content: joi.string().required().trim(),
     category_id: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
+    status: joi.number().equal(3).optional(),
   }),
 };
 

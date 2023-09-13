@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 
 import { MailService, NotificationService, StaysService } from "../services";
+import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await StaysService.query(
@@ -17,6 +18,8 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     files: req.files,
     user_id: user.id,
+    updated_by: user.role,
+    ...(user.role === "agent" ? { status: 2 } : {}),
   });
 
   return res.json(data);
@@ -30,12 +33,20 @@ export const deleteDocument = catchAsync(
 );
 
 export const update = catchAsync(async (req: Request, res: Response) => {
+  const blog = await StaysService.getById(req.params.id);
+  if (req.body.status) {
+    if (blog.status !== 2) {
+      throw new ApiError(403, "You cannot publish this stay");
+    }
+  }
   const user: any = req.user;
   const data = await StaysService.update(req.params.id, {
     ...req.body,
     files: req.files,
     updated_by: user.role,
-    ...(user.role === "user" ? { status: 0 } : {}),
+    ...(user.role === "user"
+      ? { status: req.body.status ? req.body.status : 0 }
+      : {}),
   });
   if (user.role === "agent" && data.status !== 1) {
     const created_by: any = data.user_id;
