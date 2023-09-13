@@ -24,6 +24,7 @@ export interface Event {
   approved_by?: Types.ObjectId;
   reject_reason?: string;
   faqs: [FAQ];
+  updated_by: string;
 }
 
 interface EventModel extends Model<Event> {
@@ -93,6 +94,10 @@ const schema = new Schema<Event>(
           answer: { type: String, required: true },
         },
       ],
+    },
+    updated_by: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

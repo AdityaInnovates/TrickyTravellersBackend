@@ -4,7 +4,11 @@ import { Event } from "../models/event.model";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id).populate("category_id", "created_by");
+  const data = await Model.findById(id).populate([
+    "category_id",
+    "created_by",
+    "approved_by",
+  ]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }

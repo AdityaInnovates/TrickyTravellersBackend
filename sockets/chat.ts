@@ -14,10 +14,9 @@ const chatSockets = (socket: Socket, users: any) => {
         chat.users.find((item: any) => item._id.toString() !== data.sender)
       );
     });
-    const sender = users.find((item: any) => item.user.id === data.sender);
 
     chat.messages.push({ sender: data.sender, message: data.message });
-    chat.save();
+    await chat.save();
     const newChat = await Chat.findById(data.id).populate([
       { path: "users" },
       { path: "messages.sender" },

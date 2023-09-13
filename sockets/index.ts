@@ -7,6 +7,7 @@ import notificationSocket from "./notification";
 
 const socket = (server: Server, users: any) => {
   server.on("connection", (socket: Socket) => {
+    socket.join(socket.id);
     socket.on("add user", (user) => {
       console.log("user added", socket.id);
       const index = users.findIndex((item: any) => item.user.id === user.id);

@@ -3,7 +3,7 @@ import { Stays as Model } from "../models";
 import ApiError from "../utils/ApiError";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id).populate(["user_id"]);
+  const data = await Model.findById(id).populate(["user_id", "approved_by"]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }

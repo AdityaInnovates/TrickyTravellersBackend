@@ -16,6 +16,7 @@ interface Stays extends Document {
   facilities: [any];
   approved_by?: Types.ObjectId;
   reject_reason?: string;
+  updated_by: string;
 }
 
 interface StaysModel extends Model<Stays> {
@@ -56,7 +57,7 @@ const schema = new Schema<Stays>(
     },
     status: {
       type: Number,
-      default: 1,
+      default: 0,
     },
     title: {
       type: String,
@@ -75,6 +76,10 @@ const schema = new Schema<Stays>(
     reject_reason: {
       type: String,
       required: false,
+    },
+    updated_by: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }

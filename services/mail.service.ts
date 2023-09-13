@@ -38,12 +38,15 @@ export const sendVerifyEmail = (email: string, token: string) => {
 export const sendBlogAgentUpdate = (
   email: string,
   updatedBy: string,
-  url: string
+  url: string,
+  type: string = "blog"
 ) => {
   var mailOptions = {
     from: config.nodemailer.email,
     to: email,
-    subject: "Blog Updates",
+    subject: `${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Updates`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,9 +57,13 @@ export const sendBlogAgentUpdate = (
 </head>
 <body>
     <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:10px" >
-    <h1>Blog Update</h1>
-    <h3>An Agent (${updatedBy}) has made some changes to the blog created by you, please click on the following link to review the changes and publish the blog</h3>
-    <a href="${config.nodemailer.redirect}/${url}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here</a>
+    <h1>${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Update</h1>
+    <h3>An Agent (${updatedBy}) has made some changes to the ${type} created by you, please click on the following link to review the changes and publish the ${type}</h3>
+    <a href="${
+      config.nodemailer.redirect
+    }/${url}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here</a>
 </div>
     </body>
 </html>`,
@@ -70,12 +77,15 @@ export const sendBlogReject = (
   email: string,
   updatedBy: string,
   remark: string,
-  title: string
+  title: string,
+  type: string = "blog"
 ) => {
   var mailOptions = {
     from: config.nodemailer.email,
     to: email,
-    subject: "Blog Updates",
+    subject: `${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Updates`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,8 +96,10 @@ export const sendBlogReject = (
 </head>
 <body>
     <div style="align-items:center;justify-content:center;width:100%;gap:10px" >
-    <h1 >Blog Update</h1>
-    <h3 style="margin-top:10px">An Agent (${updatedBy}) has rejected your blog with title "${title}"  </h3>
+    <h1 ${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Update</h1>
+    <h3 style="margin-top:10px">An Agent (${updatedBy}) has rejected your ${type} with title "${title}"  </h3>
     <p style="margin-top:10px">Reason: ${remark} </p>
 </div>
     </body>
@@ -101,12 +113,15 @@ export const sendBlogReject = (
 export const sendBlogAccept = (
   email: string,
   updatedBy: string,
-  url: string
+  url: string,
+  type: string = "blog"
 ) => {
   var mailOptions = {
     from: config.nodemailer.email,
     to: email,
-    subject: "Blog Updates",
+    subject: `${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Updates`,
     html: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -117,9 +132,13 @@ export const sendBlogAccept = (
 </head>
 <body>
     <div style="width:100%;gap:10px" >
-    <h1>Blog Update</h1>
-    <h3>An Agent (${updatedBy}) has approved your blog,please visit the link below to see the blog.</h3>
-    <a href="${config.nodemailer.redirect}/${url}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here</a>
+    <h1>${
+      type === "blog" ? "Blog" : type === "stay" ? "Stays" : "Events"
+    } Update</h1>
+    <h3>An Agent (${updatedBy}) has approved your ${type},please visit the link below to see the ${type}.</h3>
+    <a href="${
+      config.nodemailer.redirect
+    }/${url}" style="background-color: #4267b2;color:white;padding:1em;border-radius:1em;text-decoration: none;">Click here</a>
 </div>
     </body>
 </html>`,
