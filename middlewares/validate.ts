@@ -11,9 +11,10 @@ const validate =
         req.body[obj] = JSON.parse(req.body[obj]);
       }
       console.log(req.body[obj]);
-      req.body[obj] = req.body[obj].map((item: any) =>
-        typeof item === "string" ? JSON.parse(item) : item
-      );
+      if (req.body.obj)
+        req.body[obj] = req.body[obj].map((item: any) =>
+          typeof item === "string" ? JSON.parse(item) : item
+        );
     });
 
     const validSchema = pick(schema, ["params", "query", "body"]);
