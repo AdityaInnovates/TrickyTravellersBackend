@@ -7,3 +7,4 @@ export const create = async (
 ) => {
   return await Model.create({ user, title, notification });
 };
+

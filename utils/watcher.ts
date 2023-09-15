@@ -13,6 +13,6 @@ const watch = async (socket: Socket, users: any) => {
       socket.to(user.id).emit("new notification", next.fullDocument);
     }
   });
-};
+};  
 
 export default watch;

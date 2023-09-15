@@ -16,13 +16,13 @@ export const create = {
 export const update = {
   params: joi.object({ id: joi.string().required().trim() }),
   body: joi.object({
-    title: joi.string().required().trim(),
-    body: joi.string().required().trim(),
-    address: joi.string().required().trim(),
+    title: joi.string().optional().trim(),
+    body: joi.string().optional().trim(),
+    address: joi.string().optional().trim(),
 
-    keywords: joi.array().items(joi.string().required().trim()),
-    price: joi.number().required(),
-    facilities: joi.array().items(joi.any()),
+    keywords: joi.array().items(joi.string().required().trim()).optional(),
+    price: joi.number().optional(),
+    facilities: joi.array().items(joi.any()).optional(),
     discount: joi.number().optional().min(0).max(100),
     status: joi.number().equal(3).optional(),
   }),
