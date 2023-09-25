@@ -17,6 +17,9 @@ const env = joi
     NODEMAILER_EMAIL: joi.string().required(),
     NODEMAILER_PASSWORD: joi.string().required(),
     NODEMAILER_REDIRECT: joi.string().required(),
+    GOOGLE_CLIENT_ID: joi.string().required(),
+    GOOGLE_CLIENT_SECRET: joi.string().required(),
+    GOOGLE_CALLBACK_URL: joi.string().required(),
   })
   .unknown();
 
@@ -47,6 +50,12 @@ const vars = {
     email: value.NODEMAILER_EMAIL,
     password: value.NODEMAILER_PASSWORD,
     redirect: value.NODEMAILER_REDIRECT,
+  },
+
+  google: {
+    id: value.GOOGLE_CLIENT_ID,
+    secret: value.GOOGLE_CLIENT_SECRET,
+    callback: value.GOOGLE_CALLBACK_URL,
   },
 };
 

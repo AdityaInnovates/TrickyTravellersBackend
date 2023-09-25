@@ -9,6 +9,8 @@ export const getById = async (id: string) => {
     "created_by",
     "approved_by",
     "comments.user_id",
+    "likes",
+    "content",
   ]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
@@ -20,7 +22,9 @@ export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
     slug:
-      data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.created_by,
+      data?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      data.created_by.username,
     featured: data.files.featured[0].path,
     // extra_image: data.files.extra_image[0].path,
   });
@@ -34,6 +38,8 @@ export const query = async (filter: any, options: any) => {
       "created_by",
       "approved_by",
       "comments.user_id",
+      "likes",
+      "content",
     ]);
     return categories;
   }
@@ -42,8 +48,9 @@ export const query = async (filter: any, options: any) => {
 };
 
 export const update = async (id: string, data: any) => {
-  const result: any = await Model.findById(id);
-  console.log(result);
+  const result = await getById(id);
+  const created_by: any = result.created_by;
+
   Object.assign(result, {
     ...data,
     slug:
@@ -51,7 +58,7 @@ export const update = async (id: string, data: any) => {
         ? data?.title?.toLowerCase()?.split(" ").join("-")
         : result.title.toLowerCase().split(" ").join("-")) +
       "-" +
-      result.created_by,
+      created_by.username,
     ...(data.files?.featured ? { featured: data.files.featured[0].path } : {}),
     // ...(data.files.extra ? { extra: data.files.extra_image[0].path } : {}),
   });
@@ -76,4 +83,19 @@ export const comment = async (id: string, data: any) => {
   await result?.save();
   const blog = await getById(id);
   return blog;
+};
+
+export const like = async (id: string, user: string) => {
+  const data: any = await Model.findById(id);
+
+  if (data.likes.includes(user)) {
+    data.likes = data.likes.filter((item: string) => {
+      return item.toString() !== user;
+    });
+  } else {
+    data.likes.push(user);
+  }
+  await data.save();
+  const result = await getById(id);
+  return result;
 };

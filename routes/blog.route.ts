@@ -51,4 +51,6 @@ router.put(
   BlogController.comment
 );
 
+router.put("/like/:id", auth("blog-update"), BlogController.like);
+
 export default router;

@@ -23,8 +23,27 @@ export const findUser = async (email: string) => {
   return user;
 };
 
+export const getById = async (id: string) => {
+  const fields = [
+    "name",
+    "password",
+    "email",
+    "role",
+    "active",
+    "ban",
+    "google_id",
+    "remember_token",
+    "profile_photo_path",
+  ];
+  const user = await Model.findById(id).select(fields.join(" "));
+
+  if (!user) {
+    throw new ApiError(StatusCodes.NOT_FOUND, "Invalid email");
+  }
+  return user;
+};
+
 export const query = async (filter: any, options: any) => {
-  console.log(filter);
   const users = await Model.paginate(filter, options);
   return users;
 };
@@ -35,7 +54,6 @@ export const login = async (data: { email: string; password: string }) => {
     throw new ApiError(StatusCodes.FORBIDDEN, "User not activated yet");
   }
   const pass = await user.isPasswordMatch(data.password);
-  console.log(pass);
   if (!pass) {
     throw new ApiError(StatusCodes.FORBIDDEN, "Invalid Username or password");
   } else return user;

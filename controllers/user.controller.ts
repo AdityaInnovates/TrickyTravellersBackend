@@ -1,7 +1,16 @@
 import { Request, Response } from "express";
-import { MailService, TokenService, UserService } from "../services";
+import {
+  MailService,
+  NotificationService,
+  TokenService,
+  UserService,
+} from "../services";
 import catchAsync from "../utils/catchAsync";
-
+import passport from "passport";
+import config from "../config/config";
+import ApiError from "../utils/ApiError";
+import { StatusCodes } from "http-status-codes";
+import { User } from "../models";
 export const login = catchAsync(async (req: Request, res: Response) => {
   const user = await UserService.login(req.body);
   const token = await TokenService.generateToken(user);
@@ -54,4 +63,49 @@ export const get = catchAsync(async (req: Request, res: Response) => {
     { ...req.query }
   );
   return res.json(data);
+});
+
+export const googleSuccess = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.user);
+  if (req.user) {
+    const payload: any = req.user;
+    const user: any = await User.findOne({ email: payload.email });
+    const token = await TokenService.generateToken(user);
+    if (!user?.google_id) {
+      user.google_id = payload.id;
+      await user?.save();
+    }
+
+    return res.json({ user, token });
+  } else {
+    res.status(403).json({ error: true, message: "Not Authorized" });
+  }
+});
+
+export const googleFailed = catchAsync(async (req: Request, res: Response) => {
+  res.status(403).json({ error: true, message: "Not Authorized" });
+});
+
+export const follow = catchAsync(async (req: Request, res: Response) => {
+  const sender: any = req.user;
+  const receiver = await UserService.getById(req.params.id);
+  if (sender.following.find((item: any) => item.toString() === req.params.id)) {
+    sender.following = sender.following.filter(
+      (item: any) => item.toString() === req.params.id
+    );
+    receiver.followers = sender.following.filter(
+      (item: any) => item.toString() === sender.id
+    );
+  } else {
+    sender.following.push(req.params.id);
+    receiver.followers.push(sender.id);
+    await NotificationService.create(
+      receiver._id,
+      "User Update",
+      `<a href={/profile/?_id=${sender.id}}>${sender.name}</a> has followed you`
+    );
+  }
+  await sender.save();
+  await receiver.save();
+  res.json(sender);
 });

@@ -1,4 +1,4 @@
-import { Schema, model, Model, Document } from "mongoose";
+import { Schema, model, Model, Document, Types } from "mongoose";
 import crypto from "crypto";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
@@ -13,7 +13,10 @@ export interface User extends Document {
   remember_token?: string;
   profile_photo_path?: string;
   cover_photo_path?: string;
+  username: string;
   isPasswordMatch(password: string): boolean;
+  followers: Types.ObjectId[];
+  following: Types.ObjectId[];
 }
 
 export interface UserModel extends Model<User> {
@@ -25,6 +28,10 @@ export interface UserModel extends Model<User> {
 const schema = new Schema<User>(
   {
     name: {
+      type: String,
+      required: true,
+    },
+    username: {
       type: String,
       required: true,
     },
@@ -68,6 +75,16 @@ const schema = new Schema<User>(
     google_id: {
       type: String,
       required: false,
+    },
+    followers: {
+      type: [Schema.Types.ObjectId],
+      ref: "users",
+      required: true,
+    },
+    following: {
+      type: [Schema.Types.ObjectId],
+      ref: "users",
+      required: true,
     },
   },
   { timestamps: true }

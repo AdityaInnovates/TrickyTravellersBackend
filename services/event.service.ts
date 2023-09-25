@@ -31,7 +31,8 @@ export const query = async (filter: any, options: any) => {
 };
 
 export const update = async (id: string, data: any) => {
-  const result: any = await Model.findById(id);
+  const result = await getById(id);
+  const created_by: any = result.created_by;
   Object.assign(result, {
     ...data,
     slug:
@@ -39,12 +40,11 @@ export const update = async (id: string, data: any) => {
         ? data?.title?.toLowerCase()?.split(" ").join("-")
         : result.title.toLowerCase().split(" ").join("-")) +
       "-" +
-      result.created_by,
+      created_by.username,
     ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   await result.save();
-  const blog = await getById(id);
-  return blog;
+  return result;
 };
 
 export const deleteDocument = async (id: string) => {
@@ -55,4 +55,12 @@ export const deleteDocument = async (id: string) => {
 
 export const agentUpdate = async (id: string, data: any) => {
   return await update(id, data);
+};
+
+export const comment = async (id: string, data: any) => {
+  const result = await Model.findById(id);
+  result?.comments.push(data);
+  await result?.save();
+  const blog = await getById(id);
+  return blog;
 };

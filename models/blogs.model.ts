@@ -5,14 +5,15 @@ import toJSON from "./plugins/toJSON";
 export interface Comment {
   user_id: Types.ObjectId;
   comment: string;
+  replies: Comment[];
 }
 
 export interface Blog {
   title: string;
-  content: string;
   category_id: Types.ObjectId;
-  keywords: [string];
+  keywords: string[];
   visit_count?: number;
+  content: Types.ObjectId;
   created_by: Types.ObjectId;
   // extra_image: string;
   approved_by?: Types.ObjectId;
@@ -21,8 +22,8 @@ export interface Blog {
   slug?: string;
   reject_reason?: string;
   updated_by: string;
-  comments: [Comment];
-  likes: [Types.ObjectId];
+  comments: Comment[];
+  likes: Types.ObjectId[];
 }
 
 interface BlogModel extends Model<Blog> {
@@ -32,15 +33,29 @@ interface BlogModel extends Model<Blog> {
 const comment = new Schema<Comment>({
   user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
   comment: { type: String, required: true },
+  replies: {
+    type: [
+      {
+        user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
+        comment: { type: String, required: true },
+      },
+    ],
+    required: true,
+    default: [],
+  },
 });
 
 const schema = new Schema<Blog>(
   {
     title: { type: String, required: true },
-    content: { type: String, required: true },
     category_id: {
       type: Schema.Types.ObjectId,
       ref: "categories",
+      required: true,
+    },
+    content: {
+      type: Schema.Types.ObjectId,
+      ref: "post-contents",
       required: true,
     },
     keywords: {

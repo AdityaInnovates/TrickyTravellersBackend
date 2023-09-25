@@ -13,7 +13,7 @@ router.post(
   auth("stays-update"),
   upload.fields([{ name: "image", maxCount: 1 }]),
 
-  validate(StaysValidation.create),
+  validate(StaysValidation.create, ["tiers"]),
   StaysController.create
 );
 router.delete(
@@ -26,7 +26,7 @@ router.put(
   "/:id",
   auth("stays-update"),
   upload.fields([{ name: "image", maxCount: 1 }]),
-  validate(StaysValidation.update),
+  validate(StaysValidation.update, ["tiers"]),
 
   StaysController.update
 );
@@ -38,5 +38,12 @@ router.put(
   StaysController.agentUpdate
 );
 router.get("/single/:id", StaysController.getSingle);
+
+router.put(
+  "/comment/:id",
+  auth("event-update"),
+  validate(StaysValidation.comment),
+  StaysController.comment
+);
 
 export default router;

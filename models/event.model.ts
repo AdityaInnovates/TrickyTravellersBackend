@@ -1,7 +1,11 @@
 import { Schema, model, Model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
-
+export interface Comment {
+  user_id: Types.ObjectId;
+  comment: string;
+  replies: Comment[];
+}
 export interface FAQ {
   question: string;
   answer: string;
@@ -10,7 +14,7 @@ export interface FAQ {
 export interface Event {
   body: string;
   date: string;
-  keywords: [string];
+  keywords: string[];
   location_id: string;
   image: string;
   category_id: Types.ObjectId;
@@ -23,10 +27,25 @@ export interface Event {
   video?: string;
   approved_by?: Types.ObjectId;
   reject_reason?: string;
-  faqs: [FAQ];
+  faqs: FAQ[];
   updated_by: string;
+  comments: Comment[];
 }
 
+const comment = new Schema<Comment>({
+  user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
+  comment: { type: String, required: true },
+  replies: {
+    type: [
+      {
+        user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
+        comment: { type: String, required: true },
+      },
+    ],
+    required: true,
+    default: [],
+  },
+});
 interface EventModel extends Model<Event> {
   paginate: any;
 }
@@ -98,6 +117,11 @@ const schema = new Schema<Event>(
     updated_by: {
       type: String,
       required: true,
+    },
+    comments: {
+      type: [comment],
+      required: true,
+      default: [],
     },
   },
   { timestamps: true }

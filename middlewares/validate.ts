@@ -10,15 +10,16 @@ const validate =
       if (typeof req.body[obj] === "string") {
         req.body[obj] = JSON.parse(req.body[obj]);
       }
-      console.log(req.body[obj]);
+
       if (req.body.obj)
         req.body[obj] = req.body[obj].map((item: any) =>
           typeof item === "string" ? JSON.parse(item) : item
         );
     });
+    console.log(req.body);
 
     const validSchema = pick(schema, ["params", "query", "body"]);
-    console.log(req.body);
+
     const object = pick(req, Object.keys(validSchema));
 
     const { value, error } = joi

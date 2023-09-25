@@ -19,6 +19,10 @@ export const create = catchAsync(async (req: Request, res: Response) => {
     files: req.files,
     user_id: user.id,
     updated_by: user.role,
+    slug:
+      req.body?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      user.username,
     ...(user.role === "agent" ? { status: 2 } : {}),
   });
 
@@ -108,4 +112,13 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     );
   }
   return res.json(data);
+});
+
+export const comment = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await StaysService.comment(req.params.id, {
+    ...req.body,
+    user_id: user.id,
+  });
+  res.json(data);
 });

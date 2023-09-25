@@ -38,4 +38,11 @@ router.put(
   EventController.agentUpdate
 );
 
+router.put(
+  "/comment/:id",
+  auth("event-update"),
+  validate(EventValidation.comment),
+  EventController.comment
+);
+
 export default router;

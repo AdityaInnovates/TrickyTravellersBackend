@@ -22,16 +22,16 @@ export const create = async (data: any) => {
 export const query = async (filter: any, options: any) => {
   if (Object.keys(filter).length > 0) {
     const result = await Model.find(filter).populate(["user_id"]);
-    console.log(result);
+
     return result;
   }
   const result = await Model.paginate(filter, options);
-  console.log(result);
   return result;
 };
 
 export const update = async (id: string, data: any) => {
   const result = await getById(id);
+  const user: any = result.user_id;
   Object.assign(result, {
     ...data,
     ...(data.files?.image ? { image: data.files.image[0].path } : {}),
@@ -40,7 +40,7 @@ export const update = async (id: string, data: any) => {
         ? data?.title?.toLowerCase()?.split(" ").join("-")
         : result.title.toLowerCase().split(" ").join("-")) +
       "-" +
-      result.user_id._id,
+      user.username,
   });
   await result.save();
   return result;
@@ -54,4 +54,12 @@ export const deleteDocument = async (id: string) => {
 
 export const agentUpdate = async (id: string, data: any) => {
   return await update(id, data);
+};
+
+export const comment = async (id: string, data: any) => {
+  const result = await Model.findById(id);
+  result?.comments.push(data);
+  await result?.save();
+  const blog = await getById(id);
+  return blog;
 };

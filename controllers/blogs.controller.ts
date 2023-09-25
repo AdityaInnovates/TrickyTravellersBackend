@@ -3,6 +3,7 @@ import catchAsync from "../utils/catchAsync";
 
 import { BlogService, MailService, NotificationService } from "../services";
 import ApiError from "../utils/ApiError";
+import { PostContent } from "../models";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
@@ -18,11 +19,17 @@ export const get = catchAsync(async (req: Request, res: Response) => {
 
 export const create = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
+  const content = await PostContent.create({ content: req.body.content });
   const data = await BlogService.create({
     ...req.body,
     files: req.files,
     created_by: user.id,
     updated_by: user.role,
+    content: content._id,
+    slug:
+      req.body?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      user.username,
     ...(user.role === "agent" ? { status: 2 } : {}),
   });
 
@@ -38,14 +45,19 @@ export const deleteDocument = catchAsync(
 
 export const update = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
-
   const blog = await BlogService.getById(req.params.id);
   if (req.body.status) {
     if (blog.status !== 2) {
       throw new ApiError(403, "You cannot publish this blog");
     }
   }
+  if (req.body.content) {
+    const content: any = await PostContent.findById(blog.content);
 
+    content.content = req.body.content;
+    await content.save();
+  }
+  delete req.body.content;
   const data = await BlogService.update(req.params.id, {
     ...req.body,
     files: req.files,
@@ -83,6 +95,11 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     updated_by: user.role,
   });
+  if (req.body.content) {
+    const content: any = await PostContent.findById(data.content);
+    content.content = req.body.content;
+    await content.save();
+  }
   if (req.body.status === 1) {
     const created_by: any = data.created_by;
     await MailService.sendBlogReject(
@@ -119,5 +136,11 @@ export const comment = catchAsync(async (req: Request, res: Response) => {
     ...req.body,
     user_id: user.id,
   });
+  res.json(data);
+});
+
+export const like = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+  const data = await BlogService.like(req.params.id, user.id);
   res.json(data);
 });
