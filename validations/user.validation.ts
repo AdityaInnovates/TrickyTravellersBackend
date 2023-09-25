@@ -28,3 +28,9 @@ export const change_password = {
     new_password: joi.string().trim().required(),
   }),
 };
+
+export const follow = {
+  params: joi.object().keys({
+    id: joi.string().trim().required(),
+  }),
+};
