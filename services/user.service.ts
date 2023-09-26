@@ -2,6 +2,7 @@ import { User as Model } from "../models";
 
 import { StatusCodes } from "http-status-codes";
 import ApiError from "../utils/ApiError";
+import mongoose from "mongoose";
 
 export const findUser = async (email: string) => {
   const fields = [
@@ -85,6 +86,34 @@ export const updateUser = async (body: any, user: any) => {
       : {}),
   });
 
+  await user.save();
+  return user;
+};
+
+export const follow = async (user_id: string, id: string) => {
+  const user = await getById(user_id);
+  if (user.following.find((item: any) => item.toString() === id)) {
+    user.following = user.following.filter(
+      (item: any) => item.toString() !== id
+    );
+  } else {
+    const param = new mongoose.Types.ObjectId(id);
+    user.following.push(param);
+  }
+  await user.save();
+  return user;
+};
+
+export const addFollower = async (user_id: string, id: string) => {
+  const user = await getById(user_id);
+  if (user.followers.find((item: any) => item.toString() === id)) {
+    user.followers = user.followers.filter(
+      (item: any) => item.toString() !== id
+    );
+  } else {
+    const param = new mongoose.Types.ObjectId(id);
+    user.followers.push(param);
+  }
   await user.save();
   return user;
 };

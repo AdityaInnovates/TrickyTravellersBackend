@@ -6,7 +6,7 @@ const GoogleStrategy = new Strategy(
   {
     clientID: config.google.id,
     clientSecret: config.google.secret,
-    callbackURL: "/v1/auth/google/callback",
+    callbackURL: "https://trickytravellers.in/api/v1/auth/google/callback",
     passReqToCallback: true,
     scope: ["profile", "email"],
   },

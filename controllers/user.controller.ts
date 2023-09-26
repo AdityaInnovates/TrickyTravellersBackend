@@ -84,29 +84,13 @@ export const googleFailed = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const follow = catchAsync(async (req: Request, res: Response) => {
-  const sender: any = req.user;
-  const receiver = await UserService.getById(req.params.id);
-
-  if (sender.following.find((item: any) => item.toString() === req.params.id)) {
-    sender.following = sender.following.filter(
-      (item: any) => item.toString() !== req.params.id
-    );
-    receiver.followers = sender.following.filter(
-      (item: any) => item.toString() !== sender.id
-    );
-  } else {
-    if (sender.following) sender.following.push(req.params.id);
-    else sender.following = [req.params.id];
-    if (receiver.followers) receiver.followers.push(sender.id);
-    else receiver.followers = [sender.id];
-    await sender.save();
-    await receiver.save();
-    await NotificationService.create(
-      receiver._id,
-      "User Update",
-      `<a href={/profile/?_id=${sender.id}}>${sender.name}</a> has followed you`
-    );
-  }
-
-  res.json(sender);
+  const user: any = req.user;
+  const data = await UserService.follow(user.id, req.params.id);
+  await UserService.addFollower(req.params.id, user.id);
+  await NotificationService.create(
+    req.params.id,
+    "User Update",
+    `<a href={/profile/?_id=${user.id}}>${user.name}</a> has followed you`
+  );
+  res.json(data);
 });
