@@ -5,7 +5,7 @@ import toJSON from "./plugins/toJSON";
 export interface Comment {
   user_id: Types.ObjectId;
   comment: string;
-  replies: Comment[];
+  replies: { user_id: Types.ObjectId; comment: string }[];
 }
 
 export interface Blog {

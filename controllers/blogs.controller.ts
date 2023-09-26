@@ -139,6 +139,18 @@ export const comment = catchAsync(async (req: Request, res: Response) => {
   res.json(data);
 });
 
+export const reply = catchAsync(async (req: Request, res: Response) => {
+  const user: any = req.user;
+
+  const reply = await BlogService.reply(
+    req.params.blog,
+    req.params.comment,
+    req.body.comment,
+    user.id
+  );
+  return res.send("Reply Added");
+});
+
 export const like = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
   const data = await BlogService.like(req.params.id, user.id);

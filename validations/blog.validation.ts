@@ -32,3 +32,11 @@ export const comment = {
   params: joi.object({ id: joi.string().required().trim() }),
   body: joi.object({ comment: joi.string().trim().required() }),
 };
+
+export const reply = {
+  params: joi.object({
+    blog: joi.string().required().trim(),
+    comment: joi.string().required().trim(),
+  }),
+  body: joi.object({ comment: joi.string().trim().required() }),
+};

@@ -52,5 +52,10 @@ router.put(
 );
 
 router.put("/like/:id", auth("blog-update"), BlogController.like);
-
+router.put(
+  "/reply/:blog/:comment",
+  auth("blog-update"),
+  validate(BlogValidation.reply),
+  BlogController.reply
+);
 export default router;

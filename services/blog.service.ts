@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Blog as Model } from "../models";
 import { Blog } from "../models/blogs.model";
 import ApiError from "../utils/ApiError";
+import mongoose from "mongoose";
 
 export const getById = async (id: string) => {
   const data = await Model.findById(id).populate([
@@ -9,9 +10,11 @@ export const getById = async (id: string) => {
     "created_by",
     "approved_by",
     "comments.user_id",
+    // "comment.replies.user_id",
     "likes",
     "content",
   ]);
+
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
@@ -37,7 +40,7 @@ export const query = async (filter: any, options: any) => {
       "category_id",
       "created_by",
       "approved_by",
-      "comments.user_id",
+      // "comments.user_id",
       "likes",
       "content",
     ]);
@@ -99,4 +102,27 @@ export const like = async (id: string, user: string) => {
   await data.save();
   const result = await getById(id);
   return result;
+};
+
+export const reply = async (
+  blog_id: string,
+  comment_id: string,
+  comment: string,
+  user: string
+) => {
+  const blog = await getById(blog_id);
+  console.log(blog.comments);
+  const commentIndex = blog.comments.findIndex(
+    (item: any) => item._id.toString() === comment_id
+  );
+  if (commentIndex === -1) {
+    throw new ApiError(404, "Invalid Comment id");
+  }
+  const param = new mongoose.Types.ObjectId(user);
+  blog.comments[commentIndex].replies.push({
+    user_id: param,
+    comment,
+  });
+  await blog.save();
+  return blog;
 };
