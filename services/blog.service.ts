@@ -69,6 +69,7 @@ export const update = async (id: string, data: any) => {
 
 export const deleteDocument = async (id: string) => {
   const data = await getById(id);
+
   await data.remove();
   return "Entry Deleted";
 };

@@ -14,7 +14,10 @@ export const findUser = async (email: string) => {
     "google_id",
     "remember_token",
     "profile_photo_path",
+    "followers",
+    "following",
   ];
+
   const user = await Model.findOne({ email }).select(fields.join(" "));
 
   if (!user) {
@@ -34,11 +37,14 @@ export const getById = async (id: string) => {
     "google_id",
     "remember_token",
     "profile_photo_path",
+    "followers",
+    "following",
   ];
-  const user = await Model.findById(id).select(fields.join(" "));
 
+  const user = await Model.findById(id).select(fields.join(" "));
+  console.log(user);
   if (!user) {
-    throw new ApiError(StatusCodes.NOT_FOUND, "Invalid email");
+    throw new ApiError(StatusCodes.NOT_FOUND, "Invalid id");
   }
   return user;
 };

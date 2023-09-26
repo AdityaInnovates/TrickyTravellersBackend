@@ -80,11 +80,13 @@ const schema = new Schema<User>(
       type: [Schema.Types.ObjectId],
       ref: "users",
       required: true,
+      default: [],
     },
     following: {
       type: [Schema.Types.ObjectId],
       ref: "users",
       required: true,
+      default: [],
     },
   },
   { timestamps: true }

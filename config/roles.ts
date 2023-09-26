@@ -7,6 +7,7 @@ rights.set(roles[0], [
   "blog-create",
   "blog-update",
   "blog-read",
+  "blog-delete",
   "event-create",
   "event-update",
   "event-read",
@@ -17,6 +18,8 @@ rights.set(roles[0], [
   "destination-read",
   "profile",
   "chat",
+  "follow",
+  "image-upload",
 ]);
 rights.set(roles[1], [
   "blog-create",
@@ -40,13 +43,14 @@ rights.set(roles[1], [
   "stays-read",
   "stays-delete",
   "chat",
-  "follow",
+  "image-upload",
 ]);
 
 rights.set(roles[2], [
   "blog-review",
   "blog-update",
   "blog-read",
+  "blog-delete",
   "event-review",
   "event-update",
   "event-read",
@@ -58,4 +62,5 @@ rights.set(roles[2], [
   "blog-create",
   "chat",
   "follow",
+  "image-upload",
 ]);
