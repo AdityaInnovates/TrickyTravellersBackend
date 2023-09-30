@@ -10,8 +10,8 @@ const router = Router();
 router.get("/", StaysController.get);
 router.post(
   "/",
-  auth("stays-update"),
-  upload.fields([{ name: "image", maxCount: 1 }]),
+  auth("stays-create"),
+  upload.any(),
 
   validate(StaysValidation.create, ["tiers"]),
   StaysController.create

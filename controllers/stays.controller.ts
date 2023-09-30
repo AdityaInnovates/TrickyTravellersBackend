@@ -16,7 +16,6 @@ export const create = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
   const data = await StaysService.create({
     ...req.body,
-    files: req.files,
     user_id: user.id,
     updated_by: user.role,
     slug:

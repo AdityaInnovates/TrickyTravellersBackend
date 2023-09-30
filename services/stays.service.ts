@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Stays as Model } from "../models";
 import ApiError from "../utils/ApiError";
+import { CommentService } from ".";
 
 export const getById = async (id: string) => {
   const data = await Model.findById(id).populate(["user_id", "approved_by"]);
@@ -13,8 +14,6 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const stays = await Model.create({
     ...data,
-    image: data.files.image[0].path,
-    slug: data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.user_id,
   });
   return stays;
 };
@@ -57,9 +56,14 @@ export const agentUpdate = async (id: string, data: any) => {
 };
 
 export const comment = async (id: string, data: any) => {
-  const result = await Model.findById(id);
-  result?.comments.push(data);
-  await result?.save();
-  const blog = await getById(id);
-  return blog;
+  const result: any = await Model.findById(id);
+  const comment = await CommentService.addComment(
+    data,
+    result.comments ? String(result?.comments) : undefined
+  );
+  if (!result.comments) {
+    result.comments = comment.id;
+    await result.save();
+  }
+  return result;
 };

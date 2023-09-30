@@ -7,22 +7,27 @@ export const create = {
     address: joi.string().required().trim(),
 
     keywords: joi.array().items(joi.string().required().trim()),
+    images: joi.array().items(joi.string().required().trim()).required(),
 
     facilities: joi.array().items(joi.any()),
-    discount: joi.number().optional().min(0).max(100),
     tiers: joi
       .array()
       .items(
         joi
           .object({
+            images: joi
+              .array()
+              .items(joi.string().required().trim())
+              .required(),
             title: joi.string().trim().required(),
             description: joi.string().trim().required(),
             price: joi.number().required(),
+            discount: joi.number().optional().min(0).max(100),
             amenities: joi
               .array()
               .items(joi.string().trim().required().required())
               .required(),
-            other_details: joi.array().items(joi.string().trim().required()),
+            other_details: joi.string().trim().optional(),
           })
           .required()
       )
@@ -37,28 +42,32 @@ export const update = {
     body: joi.string().optional().trim(),
     address: joi.string().optional().trim(),
 
-    keywords: joi.array().items(joi.string().required().trim()).optional(),
+    keywords: joi.array().items(joi.string().optional().trim()),
+    images: joi.array().items(joi.string().optional().trim()).optional(),
 
-    facilities: joi.array().items(joi.any()).optional(),
-    discount: joi.number().optional().min(0).max(100),
+    facilities: joi.array().items(joi.any()),
     tiers: joi
       .array()
       .items(
         joi
           .object({
-            title: joi.string().trim().required(),
-            description: joi.string().trim().required(),
-            price: joi.number().required(),
+            images: joi
+              .array()
+              .items(joi.string().optional().trim())
+              .optional(),
+            title: joi.string().trim().optional(),
+            description: joi.string().trim().optional(),
+            price: joi.number().optional(),
+            discount: joi.number().optional().min(0).max(100),
             amenities: joi
               .array()
-              .items(joi.string().trim().required().required())
-              .required(),
-            other_details: joi.array().items(joi.string().trim().required()),
+              .items(joi.string().trim().optional().optional())
+              .optional(),
+            other_details: joi.string().trim().optional(),
           })
-          .required()
+          .optional()
       )
       .optional(),
-    status: joi.number().equal(3).optional(),
   }),
 };
 
@@ -72,5 +81,8 @@ export const agentUpdate = {
 
 export const comment = {
   params: joi.object({ id: joi.string().required().trim() }),
-  body: joi.object({ comment: joi.string().trim().required() }),
+  body: joi.object({
+    comment: joi.string().trim().required(),
+    rating: joi.number().max(5).min(1).required(),
+  }),
 };

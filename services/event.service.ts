@@ -1,7 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { Event as Model } from "../models";
-import { Event } from "../models/event.model";
+
 import ApiError from "../utils/ApiError";
+import { CommentService } from ".";
 
 export const getById = async (id: string) => {
   const data = await Model.findById(id).populate([
@@ -58,9 +59,14 @@ export const agentUpdate = async (id: string, data: any) => {
 };
 
 export const comment = async (id: string, data: any) => {
-  const result = await Model.findById(id);
-  result?.comments.push(data);
-  await result?.save();
-  const blog = await getById(id);
-  return blog;
+  const result: any = await Model.findById(id);
+  const comment = await CommentService.addComment(
+    data,
+    result.comments ? String(result?.comments) : undefined
+  );
+  if (!result.comments) {
+    result.comments = comment.id;
+    await result.save();
+  }
+  return result;
 };

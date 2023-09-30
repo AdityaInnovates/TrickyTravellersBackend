@@ -12,4 +12,11 @@ router.post(
   ImageController.upload
 );
 
+router.post(
+  "/bulk",
+  auth("image-upload"),
+  upload.fields([{ name: "image", maxCount: 6 }]),
+  ImageController.uploadBulk
+);
+
 export default router;

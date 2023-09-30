@@ -3,14 +3,12 @@ import { Blog as Model } from "../models";
 import { Blog } from "../models/blogs.model";
 import ApiError from "../utils/ApiError";
 import mongoose from "mongoose";
+import { CommentService } from ".";
 
 export const getById = async (id: string) => {
   const data = await Model.findById(id).populate([
     "category_id",
     "created_by",
-    "approved_by",
-    "comments.user_id",
-    // "comment.replies.user_id",
     "likes",
     "content",
   ]);
@@ -24,10 +22,6 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
-    slug:
-      data?.title?.toLowerCase()?.split(" ").join("-") +
-      "-" +
-      data.created_by.username,
     featured: data.files.featured[0].path,
     // extra_image: data.files.extra_image[0].path,
   });
@@ -40,7 +34,6 @@ export const query = async (filter: any, options: any) => {
       "category_id",
       "created_by",
       "approved_by",
-      // "comments.user_id",
       "likes",
       "content",
     ]);
@@ -82,11 +75,16 @@ export const agentUpdate = async (id: string, data: any) => {
 };
 
 export const comment = async (id: string, data: any) => {
-  const result = await Model.findById(id);
-  result?.comments.push(data);
-  await result?.save();
-  const blog = await getById(id);
-  return blog;
+  const result: any = await Model.findById(id);
+  const comment = await CommentService.addComment(
+    data,
+    result.comments ? String(result?.comments) : undefined
+  );
+  if (!result.comments) {
+    result.comments = comment.id;
+    await result.save();
+  }
+  return result;
 };
 
 export const like = async (id: string, user: string) => {
@@ -111,18 +109,10 @@ export const reply = async (
   user: string
 ) => {
   const blog = await getById(blog_id);
-  console.log(blog.comments);
-  const commentIndex = blog.comments.findIndex(
-    (item: any) => item._id.toString() === comment_id
+  await CommentService.addReply(
+    { user_id: user, comment: comment },
+    String(blog.comments),
+    comment_id
   );
-  if (commentIndex === -1) {
-    throw new ApiError(404, "Invalid Comment id");
-  }
-  const param = new mongoose.Types.ObjectId(user);
-  blog.comments[commentIndex].replies.push({
-    user_id: param,
-    comment,
-  });
-  await blog.save();
   return blog;
 };

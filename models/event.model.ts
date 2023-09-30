@@ -1,102 +1,84 @@
 import { Schema, model, Model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
-export interface Comment {
-  user_id: Types.ObjectId;
-  comment: string;
-  replies: Comment[];
-}
-export interface FAQ {
-  question: string;
-  answer: string;
+
+interface Tiers {
+  gallery: string[];
+  title: string;
+  description: string;
+  price: number;
+  discount?: number;
 }
 
 export interface Event {
-  body: string;
-  date: string;
-  keywords: string[];
-  location_id: string;
-  image: string;
-  category_id: Types.ObjectId;
-  price: number;
-  slug: string;
-  status: number;
+  gallery: string[];
   title: string;
   created_by: Types.ObjectId;
-  venue: string;
-  video?: string;
   approved_by?: Types.ObjectId;
   reject_reason?: string;
-  faqs: FAQ[];
   updated_by: string;
-  comments: Comment[];
+  keywords: string[];
+  slug: string;
+  status: number;
+  description: string;
+  inclusions: string[];
+  tiers: Tiers[];
+  comments: Types.ObjectId;
 }
-
-const comment = new Schema<Comment>({
-  user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
-  comment: { type: String, required: true },
-  replies: {
-    type: [
-      {
-        user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
-        comment: { type: String, required: true },
-      },
-    ],
-    required: true,
-    default: [],
-  },
-});
 interface EventModel extends Model<Event> {
   paginate: any;
 }
 
-const schema = new Schema<Event>(
+const schema = new Schema<Event, EventModel>(
   {
-    title: { type: String, required: true },
-    body: { type: String, required: true },
-    date: { type: String, required: true },
-    image: { type: String, required: true },
-    category_id: {
-      type: Schema.Types.ObjectId,
-      ref: "categories",
+    title: {
+      type: String,
       required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+
+    created_by: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
+    tiers: {
+      type: [
+        {
+          title: { type: String, required: true },
+          description: { type: String, required: true },
+          price: { type: Number, required: true },
+          gallery: { type: [String], required: true, default: [] },
+          discount: {
+            type: String,
+            required: false,
+          },
+        },
+      ],
     },
     keywords: {
       type: [String],
       required: true,
       default: [],
     },
+
     slug: {
       type: String,
       required: true,
     },
-    venue: {
-      type: String,
-      required: true,
-    },
-    video: {
-      type: String,
-      required: false,
-    },
-    created_by: {
-      type: Schema.Types.ObjectId,
-      ref: "users",
-      required: true,
-    },
     status: {
       type: Number,
-      required: true,
       default: 0,
     },
-    price: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    location_id: {
-      type: String,
+
+    gallery: {
+      type: [String],
       required: true,
     },
+    inclusions: { type: [String], required: true, default: [] },
     approved_by: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -106,26 +88,19 @@ const schema = new Schema<Event>(
       type: String,
       required: false,
     },
-    faqs: {
-      type: [
-        {
-          question: { type: String, required: true },
-          answer: { type: String, required: true },
-        },
-      ],
-    },
     updated_by: {
       type: String,
       required: true,
     },
     comments: {
-      type: [comment],
+      type: Schema.Types.ObjectId,
       required: true,
-      default: [],
+      ref: "comments",
     },
   },
   { timestamps: true }
 );
+
 schema.plugin(paginate);
 schema.plugin(toJSON);
 const eventModel = model<Event, EventModel>("events", schema);

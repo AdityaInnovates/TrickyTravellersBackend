@@ -1,51 +1,34 @@
 import { Schema, model, Document, Model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
-export interface Comment {
-  user_id: Types.ObjectId;
-  comment: string;
-  replies: Comment[];
-}
+
 export interface Tiers {
   name: string;
   description: string;
   amenities: string[];
-  gallery: string[];
+  images: string[];
   price: number;
-  other_details: string;
+  discount?: string;
+  other_details?: string;
 }
 
 interface Stays extends Document {
   address: string;
   body: string;
-  discount?: string;
   user_id: Types.ObjectId;
   keywords: string[];
   slug: string;
   status: number;
   title: string;
-  image: string;
+  images: string[];
   tiers: Tiers[];
   facilities: any[];
   approved_by?: Types.ObjectId;
   reject_reason?: string;
   updated_by: string;
-  comments: Comment[];
+  comments: Types.ObjectId;
 }
-const comment = new Schema<Comment>({
-  user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
-  comment: { type: String, required: true },
-  replies: {
-    type: [
-      {
-        user_id: { type: Schema.Types.ObjectId, required: true, ref: "users" },
-        comment: { type: String, required: true },
-      },
-    ],
-    required: true,
-    default: [],
-  },
-});
+
 interface StaysModel extends Model<Stays> {
   paginate: any;
 }
@@ -60,10 +43,7 @@ const schema = new Schema<Stays>(
       type: String,
       required: true,
     },
-    discount: {
-      type: String,
-      required: false,
-    },
+
     user_id: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -76,8 +56,12 @@ const schema = new Schema<Stays>(
           description: { type: String, required: true },
           amenities: { type: [String], required: true, default: [] },
           price: { type: Number, required: true },
-          gallery: { type: [String], required: true, default: [] },
-          other_details: { type: String, required: true },
+          images: { type: [String], required: true, default: [] },
+          other_details: { type: String, required: false },
+          discount: {
+            type: String,
+            required: false,
+          },
         },
       ],
     },
@@ -99,11 +83,11 @@ const schema = new Schema<Stays>(
       type: String,
       required: true,
     },
-    image: {
-      type: String,
+    images: {
+      type: [String],
       required: true,
     },
-    facilities: { type: [], required: true, default: [] },
+    facilities: { type: [String], required: true, default: [] },
     approved_by: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -118,9 +102,9 @@ const schema = new Schema<Stays>(
       required: true,
     },
     comments: {
-      type: [comment],
+      type: Schema.Types.ObjectId,
       required: true,
-      default: [],
+      ref: "comments",
     },
   },
   { timestamps: true }
