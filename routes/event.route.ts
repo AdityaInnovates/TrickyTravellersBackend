@@ -12,7 +12,7 @@ router.get("/", EventController.get);
 router.post(
   "/",
   auth("event-create"),
-  upload.fields([{ name: "image", maxCount: 1 }]),
+
   validate(EventValidation.create, ["faqs"]),
   EventController.create
 );
@@ -25,7 +25,7 @@ router.delete(
 router.put(
   "/:id",
   auth("event-update"),
-  upload.fields([{ name: "image", maxCount: 1 }]),
+
   validate(EventValidation.update, ["faqs"]),
   EventController.update
 );

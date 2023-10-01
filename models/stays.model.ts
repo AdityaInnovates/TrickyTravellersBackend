@@ -8,7 +8,7 @@ export interface Tiers {
   amenities: string[];
   images: string[];
   price: number;
-  discount?: string;
+  discount?: number;
   other_details?: string;
 }
 
@@ -59,8 +59,9 @@ const schema = new Schema<Stays>(
           images: { type: [String], required: true, default: [] },
           other_details: { type: String, required: false },
           discount: {
-            type: String,
+            type: Number,
             required: false,
+            default: 0,
           },
         },
       ],
@@ -103,7 +104,7 @@ const schema = new Schema<Stays>(
     },
     comments: {
       type: Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "comments",
     },
   },

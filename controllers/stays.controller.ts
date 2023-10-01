@@ -45,8 +45,12 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
   const data = await StaysService.update(req.params.id, {
     ...req.body,
-    files: req.files,
+    user_id: user.id,
     updated_by: user.role,
+    slug:
+      req.body?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      user.username,
     ...(user.role === "user"
       ? { status: req.body.status ? req.body.status : 0 }
       : {}),

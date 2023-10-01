@@ -33,13 +33,6 @@ export const update = async (id: string, data: any) => {
   const user: any = result.user_id;
   Object.assign(result, {
     ...data,
-    ...(data.files?.image ? { image: data.files.image[0].path } : {}),
-    slug:
-      (data.title
-        ? data?.title?.toLowerCase()?.split(" ").join("-")
-        : result.title.toLowerCase().split(" ").join("-")) +
-      "-" +
-      user.username,
   });
   await result.save();
   return result;

@@ -38,12 +38,12 @@ export const create = {
 export const update = {
   params: joi.object({ id: joi.string().required().trim() }),
   body: joi.object({
-    title: joi.string().optional().trim(),
-    body: joi.string().optional().trim(),
-    address: joi.string().optional().trim(),
+    title: joi.string().required().trim(),
+    body: joi.string().required().trim(),
+    address: joi.string().required().trim(),
 
-    keywords: joi.array().items(joi.string().optional().trim()),
-    images: joi.array().items(joi.string().optional().trim()).optional(),
+    keywords: joi.array().items(joi.string().required().trim()),
+    images: joi.array().items(joi.string().required().trim()).required(),
 
     facilities: joi.array().items(joi.any()),
     tiers: joi
@@ -53,21 +53,21 @@ export const update = {
           .object({
             images: joi
               .array()
-              .items(joi.string().optional().trim())
-              .optional(),
-            title: joi.string().trim().optional(),
-            description: joi.string().trim().optional(),
-            price: joi.number().optional(),
+              .items(joi.string().required().trim())
+              .required(),
+            title: joi.string().trim().required(),
+            description: joi.string().trim().required(),
+            price: joi.number().required(),
             discount: joi.number().optional().min(0).max(100),
             amenities: joi
               .array()
-              .items(joi.string().trim().optional().optional())
-              .optional(),
+              .items(joi.string().trim().required().required())
+              .required(),
             other_details: joi.string().trim().optional(),
           })
-          .optional()
+          .required()
       )
-      .optional(),
+      .required(),
   }),
 };
 

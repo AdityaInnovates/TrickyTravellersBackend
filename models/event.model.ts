@@ -3,7 +3,7 @@ import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
 
 interface Tiers {
-  gallery: string[];
+  images: string[];
   title: string;
   description: string;
   price: number;
@@ -11,8 +11,10 @@ interface Tiers {
 }
 
 export interface Event {
-  gallery: string[];
+  category_id: Types.ObjectId;
+  images: string[];
   title: string;
+  video: string;
   created_by: Types.ObjectId;
   approved_by?: Types.ObjectId;
   reject_reason?: string;
@@ -21,7 +23,7 @@ export interface Event {
   slug: string;
   status: number;
   description: string;
-  inclusions: string[];
+
   tiers: Tiers[];
   comments: Types.ObjectId;
 }
@@ -31,11 +33,20 @@ interface EventModel extends Model<Event> {
 
 const schema = new Schema<Event, EventModel>(
   {
+    category_id: {
+      type: Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
+    },
     title: {
       type: String,
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    video: {
       type: String,
       required: true,
     },
@@ -51,7 +62,7 @@ const schema = new Schema<Event, EventModel>(
           title: { type: String, required: true },
           description: { type: String, required: true },
           price: { type: Number, required: true },
-          gallery: { type: [String], required: true, default: [] },
+          images: { type: [String], required: true, default: [] },
           discount: {
             type: String,
             required: false,
@@ -74,11 +85,10 @@ const schema = new Schema<Event, EventModel>(
       default: 0,
     },
 
-    gallery: {
+    images: {
       type: [String],
       required: true,
     },
-    inclusions: { type: [String], required: true, default: [] },
     approved_by: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -94,7 +104,7 @@ const schema = new Schema<Event, EventModel>(
     },
     comments: {
       type: Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "comments",
     },
   },

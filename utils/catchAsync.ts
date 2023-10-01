@@ -5,4 +5,3 @@ const catchAsync =
   };
 
 export default catchAsync;
-  

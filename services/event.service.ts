@@ -19,9 +19,6 @@ export const getById = async (id: string) => {
 export const create = async (data: any) => {
   const blog = await Model.create({
     ...data,
-    slug:
-      data?.title?.toLowerCase()?.split(" ").join("-") + "-" + data.created_by,
-    ...(data.files?.image ? { image: data.files.image[0].path } : {}),
   });
   return blog;
 };

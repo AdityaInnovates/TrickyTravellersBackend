@@ -20,6 +20,7 @@ rights.set(roles[0], [
   "chat",
   "follow",
   "image-upload",
+  "ticket",
 ]);
 rights.set(roles[1], [
   "blog-create",
@@ -44,6 +45,7 @@ rights.set(roles[1], [
   "stays-delete",
   "chat",
   "image-upload",
+  "ticket",
 ]);
 
 rights.set(roles[2], [
@@ -63,4 +65,5 @@ rights.set(roles[2], [
   "chat",
   "follow",
   "image-upload",
+  "ticket",
 ]);

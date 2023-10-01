@@ -11,7 +11,6 @@ router.get("/", StaysController.get);
 router.post(
   "/",
   auth("stays-create"),
-  upload.any(),
 
   validate(StaysValidation.create, ["tiers"]),
   StaysController.create
@@ -25,7 +24,6 @@ router.delete(
 router.put(
   "/:id",
   auth("stays-update"),
-  upload.fields([{ name: "image", maxCount: 1 }]),
   validate(StaysValidation.update, ["tiers"]),
 
   StaysController.update

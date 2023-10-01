@@ -107,7 +107,7 @@ export const agentUpdate = catchAsync(async (req: Request, res: Response) => {
     await MailService.sendBlogAccept(
       created_by.email,
       user.name,
-      "/stays/" + data.slug,
+      "/events/" + data.slug,
       "event"
     );
     await NotificationService.create(
