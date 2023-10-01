@@ -32,25 +32,30 @@ export const create = {
 export const update = {
   params: joi.object({ id: joi.string().required().trim() }),
   body: joi.object({
-    title: joi.string().optional().trim(),
-    body: joi.string().optional().trim(),
-    venue: joi.string().optional().trim(),
-    location_id: joi.string().optional().trim(),
-    date: joi.string().optional(),
-    price: joi.number().optional(),
-    keywords: joi.array().items(joi.string().required().trim()).optional(),
-    category_id: joi.string().trim().optional(),
-    faqs: joi
+    title: joi.string().required().trim(),
+    description: joi.string().required().trim(),
+    video: joi.string().required().trim(),
+    category_id: joi.string().required().trim(),
+    keywords: joi.array().items(joi.string().required().trim()),
+    images: joi.array().items(joi.string().required().trim()).required(),
+
+    tiers: joi
       .array()
       .items(
-        joi.object({
-          _id: joi.string().trim().optional(),
-          question: joi.string().trim().required(),
-          answer: joi.string().trim().required(),
-        })
+        joi
+          .object({
+            images: joi
+              .array()
+              .items(joi.string().required().trim())
+              .required(),
+            title: joi.string().trim().required(),
+            description: joi.string().trim().required(),
+            price: joi.number().required(),
+            discount: joi.number().optional().min(0).max(100),
+          })
+          .required()
       )
-      .optional(),
-    status: joi.number().equal(3).optional(),
+      .required(),
   }),
 };
 
@@ -64,7 +69,10 @@ export const agentUpdate = {
 
 export const comment = {
   params: joi.object({ id: joi.string().required().trim() }),
-  body: joi.object({ comment: joi.string().trim().required() }),
+  body: joi.object({
+    comment: joi.string().trim().required(),
+    rating: joi.number().required().max(5).min(1),
+  }),
 };
 
 export const ticket = {
