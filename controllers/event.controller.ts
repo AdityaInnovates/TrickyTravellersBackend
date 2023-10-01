@@ -20,7 +20,7 @@ export const create = catchAsync(async (req: Request, res: Response) => {
   const user: any = req.user;
   const data = await EventService.create({
     ...req.body,
-    files: req.files,
+
     created_by: user.id,
     updated_by: user.role,
     slug:
@@ -50,7 +50,10 @@ export const update = catchAsync(async (req: Request, res: Response) => {
   }
   const data = await EventService.update(req.params.id, {
     ...req.body,
-    files: req.files,
+    slug:
+      req.body?.title?.toLowerCase()?.split(" ").join("-") +
+      "-" +
+      user.username,
     updated_by: user.role,
     ...(user.role === "user"
       ? { status: req.body.status ? req.body.status : 0 }
