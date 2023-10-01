@@ -23,7 +23,7 @@ export interface Event {
   slug: string;
   status: number;
   description: string;
-
+  venue: string;
   tiers: Tiers[];
   comments: Types.ObjectId;
 }
@@ -43,6 +43,10 @@ const schema = new Schema<Event, EventModel>(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    venue: {
       type: String,
       required: true,
     },

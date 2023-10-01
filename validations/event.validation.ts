@@ -8,7 +8,7 @@ export const create = {
     category_id: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
-
+    venue: joi.string().required().trim(),
     tiers: joi
       .array()
       .items(
@@ -38,6 +38,7 @@ export const update = {
     category_id: joi.string().required().trim(),
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
+    venue: joi.string().required().trim(),
 
     tiers: joi
       .array()
