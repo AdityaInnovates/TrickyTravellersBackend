@@ -6,7 +6,11 @@ import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await StaysService.query(
-    req.query.slug ? { slug: req.query.slug } : { ...req.query },
+    req.query.search
+      ? { $text: { $search: req.query.search } }
+      : req.query.slug
+      ? { slug: req.query.slug }
+      : { ...req.query },
     { ...req.query, populate: "user_id,approved_by" }
   );
   return res.json(data);

@@ -20,11 +20,10 @@ const chatSockets = (socket: Socket, users: any) => {
       { path: "users" },
       { path: "messages.sender" },
     ]);
+    socket.emit("message", newChat);
     if (receiver) {
       socket.to(receiver.id).emit("message", newChat);
     }
-
-    socket.emit("message", newChat);
   });
 
   socket.on("get messages", async (id) => {

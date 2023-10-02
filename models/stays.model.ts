@@ -111,7 +111,7 @@ const schema = new Schema<Stays>(
 );
 schema.plugin(paginate);
 schema.plugin(toJSON);
-
+schema.index({ title: "text", keywords: "text" });
 const staysModel = model<Stays, StaysModel>("stays", schema);
 
 export default staysModel;

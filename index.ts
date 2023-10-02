@@ -1,3 +1,4 @@
+import express from "express";
 import config from "./config/config";
 import mongoose from "mongoose";
 import app from "./app";
@@ -8,8 +9,9 @@ import { Server } from "socket.io";
 import socket from "./sockets";
 let server: Serve;
 const users: any = [];
+const socketApp = express();
 
-const httpServer = createServer(app);
+const httpServer = createServer(socketApp);
 
 const io = new Server(httpServer, { cors: { origin: "*" } });
 v2.config(config.cloudinary);
@@ -27,8 +29,11 @@ const exitHandler = () => {
 
 mongoose.connect(config.mongo.uri).then(() => {
   logger.info("Connected to MongoDB");
-  server = httpServer.listen(config.port, () => {
+  server = app.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
+  });
+  httpServer.listen(5001, () => {
+    logger.info(`Socket on port 5001`);
   });
 });
 
