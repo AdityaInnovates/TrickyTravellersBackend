@@ -84,5 +84,6 @@ export const ticket = {
     tier: joi.string().required().trim(),
     email: joi.string().required().trim(),
     phone: joi.string().required().trim(),
+    persons: joi.number().min(1).required(),
   }),
 };
