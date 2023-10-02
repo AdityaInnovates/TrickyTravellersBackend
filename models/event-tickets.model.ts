@@ -9,6 +9,7 @@ interface Tickets {
   tier: Types.ObjectId;
   user: Types.ObjectId;
   event: Types.ObjectId;
+  persons: number;
 }
 interface TicketsModel extends Model<Tickets> {
   paginate: any;
@@ -22,6 +23,7 @@ const schema = new Schema<Tickets>(
     tier: { type: Schema.Types.ObjectId, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "users" },
     event: { type: Schema.Types.ObjectId, required: true, ref: "events" },
+    persons: { type: Number, required: true, default: 1 },
   },
   { timestamps: true }
 );

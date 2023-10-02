@@ -9,6 +9,7 @@ export const create = {
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
     venue: joi.string().required().trim(),
+    date: joi.string().required().trim(),
     tiers: joi
       .array()
       .items(
@@ -39,7 +40,7 @@ export const update = {
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
     venue: joi.string().required().trim(),
-
+    date: joi.string().required().trim(),
     tiers: joi
       .array()
       .items(

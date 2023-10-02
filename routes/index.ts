@@ -11,6 +11,7 @@ import userRoute from "./user.route";
 import chatRoute from "./chat.route";
 import imageRoute from "./image.route";
 import commentRoute from "./comment.route";
+import ticketRoute from "./ticket.route";
 const router = Router();
 
 if (config.env === "development") {
@@ -27,4 +28,5 @@ router.use("/users", userRoute);
 router.use("/chats", chatRoute);
 router.use("/image", imageRoute);
 router.use("/comment", commentRoute);
+router.use("/tickets", ticketRoute);
 export default router;
