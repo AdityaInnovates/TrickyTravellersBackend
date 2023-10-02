@@ -80,7 +80,7 @@ const schema = new Schema<Blog>(
     },
 
     likes: { type: [Schema.Types.ObjectId], ref: "users", default: [] },
-    comments: { type: Schema.Types.ObjectId, ref: "comments", required: false },
+    comments: { type: Schema.Types.ObjectId, required: false },
   },
   { timestamps: true }
 );

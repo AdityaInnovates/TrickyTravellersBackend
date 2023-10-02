@@ -115,7 +115,6 @@ const schema = new Schema<Event, EventModel>(
     comments: {
       type: Schema.Types.ObjectId,
       required: false,
-      ref: "comments",
     },
   },
   { timestamps: true }

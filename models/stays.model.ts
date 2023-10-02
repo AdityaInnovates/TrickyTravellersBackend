@@ -105,7 +105,6 @@ const schema = new Schema<Stays>(
     comments: {
       type: Schema.Types.ObjectId,
       required: false,
-      ref: "comments",
     },
   },
   { timestamps: true }
