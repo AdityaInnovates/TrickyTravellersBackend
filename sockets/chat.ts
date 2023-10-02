@@ -7,13 +7,12 @@ const chatSockets = (socket: Socket, users: any) => {
       { path: "users" },
       { path: "messages.sender" },
     ]);
-
+    console.log(data);
+    console.log(users);
     const receiver = users.find((item: any) => {
-      return (
-        item.user.id ===
-        chat.users.find((item: any) => item._id.toString() !== data.sender)
-      );
+      return item.user.id === data.receiver;
     });
+    console.log(receiver, "receiver");
 
     chat.messages.push({ sender: data.sender, message: data.message });
     await chat.save();
@@ -76,4 +75,3 @@ const chatSockets = (socket: Socket, users: any) => {
 };
 
 export default chatSockets;
-  
