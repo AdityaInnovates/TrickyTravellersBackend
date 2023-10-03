@@ -57,7 +57,17 @@ export const change_password = catchAsync(
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await UserService.query(
-    req.query.slug ? { slug: req.query.slug } : { ...req.query },
+    req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { username: { $regex: req.query.search, $options: "i" } },
+          ],
+          active: true,
+        }
+      : req.query.slug
+      ? { slug: req.query.slug }
+      : { ...req.query },
     { ...req.query }
   );
   return res.json(data);

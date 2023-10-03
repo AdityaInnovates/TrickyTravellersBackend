@@ -7,7 +7,21 @@ import { PostContent } from "../models";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
-    req.query.slug ? { slug: req.query.slug } : { ...req.query },
+    req.query.search
+      ? {
+          $or: [
+            { title: { $regex: req.query.search, $options: "i" } },
+            {
+              keywords: {
+                $in: new RegExp("^[" + req.query.search + "].*", "i"),
+              },
+            },
+          ],
+          status: 3,
+        }
+      : req.query.slug
+      ? { slug: req.query.slug }
+      : { ...req.query },
     {
       ...req.query,
       populate: "created_by,category_id,approved_by",

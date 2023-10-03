@@ -7,7 +7,18 @@ import ApiError from "../utils/ApiError";
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await StaysService.query(
     req.query.search
-      ? { $text: { $search: req.query.search } }
+      ? {
+          $or: [
+            { title: { $regex: req.query.search, $options: "i" } },
+            { address: { $regex: req.query.search, $options: "i" } },
+            {
+              keywords: {
+                $in: new RegExp("^[" + req.query.search + "].*", "i"),
+              },
+            },
+          ],
+          status: 3,
+        }
       : req.query.slug
       ? { slug: req.query.slug }
       : { ...req.query },

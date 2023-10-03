@@ -6,7 +6,20 @@ import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await EventService.query(
-    { ...req.query },
+    req.query.search
+      ? {
+          $or: [
+            { title: { $regex: req.query.search, $options: "i" } },
+            {
+              keywords: {
+                $in: new RegExp("^[" + req.query.search + "].*", "i"),
+              },
+            },
+            { venue: { $regex: req.query.search, $options: "i" } },
+          ],
+          status: 3,
+        }
+      : { ...req.query },
     {
       ...req.query,
       populate: "created_by,category_id,approved_by",
