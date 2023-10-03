@@ -42,8 +42,14 @@ export const getById = async (id: string) => {
     "following",
   ];
 
-  const user = await Model.findById(id).select(fields.join(" "));
-  console.log(user);
+  if (mongoose.isValidObjectId(id)) {
+    const user = await Model.findById(id).select(fields.join(" "));
+    if (!user) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Invalid id");
+    }
+    return user;
+  }
+  const user = await Model.findOne({ username: id }).select(fields.join(" "));
   if (!user) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid id");
   }
@@ -92,6 +98,7 @@ export const updateUser = async (body: any, user: any) => {
 
 export const follow = async (user_id: string, id: string) => {
   const user = await getById(user_id);
+
   if (user.following.find((item: any) => item.toString() === id)) {
     user.following = user.following.filter(
       (item: any) => item.toString() !== id
