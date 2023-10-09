@@ -59,11 +59,15 @@ export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await UserService.query(
     req.query.search
       ? {
-          $or: [
-            { name: { $regex: req.query.search, $options: "i" } },
-            { username: { $regex: req.query.search, $options: "i" } },
+          $and: [
+            {
+              $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { username: { $regex: req.query.search, $options: "i" } },
+              ],
+            },
+            { active: true },
           ],
-          active: true,
         }
       : req.query.slug
       ? { slug: req.query.slug }

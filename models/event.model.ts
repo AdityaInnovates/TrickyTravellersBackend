@@ -25,7 +25,8 @@ export interface Event {
   description: string;
   venue: string;
   tiers: Tiers[];
-  date: string;
+  date: Date;
+  end_date: Date;
   comments: Types.ObjectId;
 }
 interface EventModel extends Model<Event> {
@@ -44,8 +45,12 @@ const schema = new Schema<Event, EventModel>(
       required: true,
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
+    },
+    end_date: {
+      type: Date,
+      required: false,
     },
     description: {
       type: String,

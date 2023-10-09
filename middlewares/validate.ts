@@ -6,6 +6,12 @@ import { NextFunction, Request, Response } from "express";
 const validate =
   (schema: any, keys: string[] = []) =>
   (req: Request, res: Response, next: NextFunction) => {
+    if (typeof req.body.keywords === "string") {
+      req.body.keywords = req.body.keywords.split(",");
+      if (typeof req.body.keywords === "string") {
+        req.body.keywords = [req.body.keywords];
+      }
+    }
     keys.forEach((obj) => {
       if (typeof req.body[obj] === "string") {
         req.body[obj] = JSON.parse(req.body[obj]);

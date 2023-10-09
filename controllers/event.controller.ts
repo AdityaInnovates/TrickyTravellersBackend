@@ -8,16 +8,26 @@ export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await EventService.query(
     req.query.search
       ? {
-          $or: [
-            { title: { $regex: req.query.search, $options: "i" } },
+          $and: [
             {
-              keywords: {
-                $in: new RegExp("^[" + req.query.search + "].*", "i"),
-              },
+              $or: [
+                { title: { $regex: req.query.search, $options: "i" } },
+                {
+                  keywords: {
+                    $in: new RegExp("^[" + req.query.search + "].*", "i"),
+                  },
+                },
+                { venue: { $regex: req.query.search, $options: "i" } },
+              ],
             },
-            { venue: { $regex: req.query.search, $options: "i" } },
+            { status: 3 },
           ],
-          status: 3,
+          ...(req.query.date
+            ? { date: { $gte: new Date(String(req.query.date)) } }
+            : {}),
+          ...(req.query.end_date
+            ? { date: { $lte: new Date(String(req.query.end_date)) } }
+            : {}),
         }
       : { ...req.query },
     {

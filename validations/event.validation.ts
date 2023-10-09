@@ -10,6 +10,7 @@ export const create = {
     images: joi.array().items(joi.string().required().trim()).required(),
     venue: joi.string().required().trim(),
     date: joi.string().required().trim(),
+    end_date: joi.string().required().trim(),
     tiers: joi
       .array()
       .items(
@@ -17,7 +18,7 @@ export const create = {
           .object({
             images: joi
               .array()
-              .items(joi.string().required().trim())
+              .items(joi.string().optional().trim())
               .required(),
             title: joi.string().trim().required(),
             description: joi.string().trim().required(),
@@ -41,6 +42,7 @@ export const update = {
     images: joi.array().items(joi.string().required().trim()).required(),
     venue: joi.string().required().trim(),
     date: joi.string().required().trim(),
+    end_date: joi.string().required().trim(),
     tiers: joi
       .array()
       .items(
@@ -48,7 +50,7 @@ export const update = {
           .object({
             images: joi
               .array()
-              .items(joi.string().required().trim())
+              .items(joi.string().optional().trim())
               .required(),
             title: joi.string().trim().required(),
             description: joi.string().trim().required(),

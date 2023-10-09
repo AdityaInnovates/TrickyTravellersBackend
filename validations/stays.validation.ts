@@ -17,7 +17,7 @@ export const create = {
           .object({
             images: joi
               .array()
-              .items(joi.string().required().trim())
+              .items(joi.string().optional().trim())
               .required(),
             title: joi.string().trim().required(),
             description: joi.string().trim().required(),
@@ -53,7 +53,7 @@ export const update = {
           .object({
             images: joi
               .array()
-              .items(joi.string().required().trim())
+              .items(joi.string().optional().trim())
               .required(),
             title: joi.string().trim().required(),
             description: joi.string().trim().required(),

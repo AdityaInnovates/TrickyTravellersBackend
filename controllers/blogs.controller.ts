@@ -9,15 +9,20 @@ export const get = catchAsync(async (req: Request, res: Response) => {
   const data = await BlogService.query(
     req.query.search
       ? {
-          $or: [
-            { title: { $regex: req.query.search, $options: "i" } },
+          $and: [
             {
-              keywords: {
-                $in: new RegExp("^[" + req.query.search + "].*", "i"),
-              },
+              $or: [
+                { title: { $regex: req.query.search, $options: "i" } },
+                {
+                  keywords: {
+                    $in: new RegExp("^[" + req.query.search + "].*", "i"),
+                  },
+                },
+              ],
             },
+            ,
+            { status: 3 },
           ],
-          status: 3,
         }
       : req.query.slug
       ? { slug: req.query.slug }
