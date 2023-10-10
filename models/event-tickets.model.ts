@@ -1,7 +1,6 @@
 import { Schema, Model, model, Types } from "mongoose";
 import paginate from "./plugins/paginate";
 import toJSON from "./plugins/toJSON";
-
 interface Tickets {
   name: string;
   email: string;
