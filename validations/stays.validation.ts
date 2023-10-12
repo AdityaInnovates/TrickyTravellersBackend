@@ -5,7 +5,7 @@ export const create = {
     title: joi.string().required().trim(),
     body: joi.string().required().trim(),
     address: joi.string().required().trim(),
-
+    category_id: joi.string().trim().required(),
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
 
@@ -41,7 +41,7 @@ export const update = {
     title: joi.string().required().trim(),
     body: joi.string().required().trim(),
     address: joi.string().required().trim(),
-
+    category_id: joi.string().trim().required(),
     keywords: joi.array().items(joi.string().required().trim()),
     images: joi.array().items(joi.string().required().trim()).required(),
 

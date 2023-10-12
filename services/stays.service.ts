@@ -4,7 +4,11 @@ import ApiError from "../utils/ApiError";
 import { CommentService } from ".";
 
 export const getById = async (id: string) => {
-  const data = await Model.findById(id).populate(["user_id", "approved_by"]);
+  const data = await Model.findById(id).populate([
+    "user_id",
+    "approved_by",
+    "category_id",
+  ]);
   if (!data) {
     throw new ApiError(StatusCodes.NOT_FOUND, "Invalid ID");
   }
@@ -19,11 +23,6 @@ export const create = async (data: any) => {
 };
 
 export const query = async (filter: any, options: any) => {
-  if (Object.keys(filter).length > 0) {
-    const result = await Model.find(filter).populate(["user_id"]);
-
-    return result;
-  }
   const result = await Model.paginate(filter, options);
   return result;
 };

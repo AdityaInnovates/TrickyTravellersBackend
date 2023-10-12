@@ -5,28 +5,39 @@ import { MailService, NotificationService, StaysService } from "../services";
 import ApiError from "../utils/ApiError";
 
 export const get = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.query);
   const data = await StaysService.query(
-    req.query.search
+    req.query.search || req.query.price || req.query.category_id
       ? {
           $and: [
             {
               $or: [
-                { title: { $regex: req.query.search, $options: "i" } },
-                {
-                  keywords: {
-                    $in: new RegExp("^[" + req.query.search + "].*", "i"),
-                  },
-                },
-                { address: { $regex: req.query.search, $options: "i" } },
+                req.query.search
+                  ? { title: { $regex: req.query.search, $options: "i" } }
+                  : {},
+                req.query.search
+                  ? {
+                      keywords: {
+                        $in: new RegExp("^[" + req.query.search + "].*", "i"),
+                      },
+                    }
+                  : {},
+                req.query.search
+                  ? { address: { $regex: req.query.search, $options: "i" } }
+                  : {},
               ],
             },
             { status: 3 },
+            req.query.price ? { "tiers.price": { $lte: req.query.price } } : {},
+            req.query.category_id
+              ? { category_id: { $in: req.query.category_id } }
+              : {},
           ],
         }
       : req.query.slug
       ? { slug: req.query.slug }
       : { ...req.query },
-    { ...req.query, populate: "user_id,approved_by" }
+    { ...req.query, populate: "user_id,approved_by,category_id" }
   );
   return res.json(data);
 });

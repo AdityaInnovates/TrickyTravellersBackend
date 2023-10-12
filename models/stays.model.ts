@@ -13,6 +13,7 @@ export interface Tiers {
 }
 
 interface Stays extends Document {
+  category_id: Types.ObjectId;
   address: string;
   body: string;
   user_id: Types.ObjectId;
@@ -43,7 +44,11 @@ const schema = new Schema<Stays>(
       type: String,
       required: true,
     },
-
+    category_id: {
+      type: Schema.Types.ObjectId,
+      ref: "categories",
+      required: true,
+    },
     user_id: {
       type: Schema.Types.ObjectId,
       ref: "users",
